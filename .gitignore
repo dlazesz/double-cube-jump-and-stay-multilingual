@@ -6,3 +6,6 @@ result
 
 jands.out
 jands.err
+
+# IDE configs
+.idea
