@@ -35,7 +35,7 @@ def dict2jsonarray( x ):
   for k in keys:
     z.append( k )
     z.append( x[k] )
-  return json.dumps( z )
+  return json.dumps( z, ensure_ascii=False )
 
 # input: vcc (as dict)
 # output: length of vcc
