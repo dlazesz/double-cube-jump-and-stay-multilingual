@@ -1,4 +1,3 @@
-
 """
 This module creates "functional annotation"
 from a CoNLL(-like) treebank.
@@ -7,29 +6,26 @@ from verbs and their direct exts.
 (ext in {dependent, argument, complement, adjunct})
 """
 
-
 import argparse
 import csv
 import sys
-
 
 # CoNLL fields -- last two added by this module
 (ID, FORM, LEMMA, UPOS, XPOS, FEATS, HEAD, DEPREL, DEPS, MISC,
  FEATS_DIC, SLOT) = range(12)
 
 FEAT_ITEM_SEP = '|'
-FEAT_VAL_SEP = '=' # UD v2.4: '=' <--> UD v2.0: '_'
+FEAT_VAL_SEP = '='  # UD v2.4: '=' <--> UD v2.0: '_'
 
 NOSLOT = '_'
 
 ROOT_UPOS = 'VERB'
 
-
 # ----- language specific tricks to improve annotation
 
 VERB_PARTICLE = [
-    'compound:prt', 'compound:preverb', # UD
-    'PREVERB' # e-magyar
+    'compound:prt', 'compound:preverb',  # UD
+    'PREVERB'  # e-magyar
 ]
 
 # maybe not needed for other languages (surely not needed for cs and hu)
@@ -48,13 +44,14 @@ DE_CONTRACTIONS = {
     'vom': 'von', 'vors': 'vor', 'vorm': 'vor', 'zum': 'zu', 'zur': 'zu'
 }
 
-PRON_LEMMAS = [ # based directly on lemma
-    'navzájem', # cs
-    'sich', 'einander', # de
+PRON_LEMMAS = [  # based directly on lemma
+    'navzájem',  # cs
+    'sich', 'einander',  # de
     # en(each other) ??? XXX XXX XXX
-    'birbiri', # tr
+    'birbiri',  # tr
     #'maga', 'egymás' # hu -- is this needed for e-magyar annotation?
 ]
+
 
 # ----- end of tricks
 
@@ -73,12 +70,12 @@ def main():
     INPUTLANG = args.language
 
     with open(filename) as fd:
-        rd = csv.reader(fd, delimiter="\t", quoting=csv.QUOTE_NONE) # no quoting
+        rd = csv.reader(fd, delimiter="\t", quoting=csv.QUOTE_NONE)  # no quoting
         sentence = []
         for row in rd:
-            if len(row) == 1 and row[0][0] == "#": # comment line
+            if len(row) == 1 and row[0][0] == "#":  # comment line
                 continue
-            if row: # line is not empty => process this token
+            if row:  # line is not empty => process this token
 
                 # feats -> feats_dic (specific format -> python data structure)
                 feats = row[FEATS]
@@ -87,8 +84,8 @@ def main():
                 else:
                     try:
                         feats_dic = {x: y
-                            for x, y in (e.split(FEAT_VAL_SEP, 1)
-                            for e in feats.split(FEAT_ITEM_SEP))}
+                                     for x, y in (e.split(FEAT_VAL_SEP, 1)
+                                                  for e in feats.split(FEAT_ITEM_SEP))}
                     except ValueError:
                         print("FATAL: " + feats + ' :: {' + '}{'.join(row) + '}')
                         exit(1)
@@ -130,12 +127,12 @@ def main():
                 ## 4. if not present: maybe based on part of speech
                 ## UPOS = 'ADV' -- omitted based on experiments on Hungarian
 
-                row.append(feats_dic) # 11th field
-                row.append(slot)      # 12th field
+                row.append(feats_dic)  # 11th field
+                row.append(slot)  # 12th field
 
                 sentence.append(row)
 
-            else: # empty line = end of sentence => process the whole sentence
+            else:  # empty line = end of sentence => process the whole sentence
 
                 for root in sentence:
                     print_token(root)
@@ -160,12 +157,12 @@ def main():
                     #        exts.append(f'{feat}@@{root[FEATS_DIC][feat]}')
 
                     # exts of the verb -- with simple loops (not slow)
-                    for ext in sentence: # direct exts
+                    for ext in sentence:  # direct exts
                         if ext[HEAD] != root[ID]:
                             continue
                         if ext[SLOT] != NOSLOT:
                             slot = ext[SLOT]
-                    
+
                             # add morphological info of ext as separate slot
                             #if 'Number' in ext[FEATS_DIC] and ext[FEATS_DIC]['Number'] != 'Sing':
                             #    exts.append(slot + '/number@@' + ext[FEATS_DIC]['Number'])
@@ -175,9 +172,9 @@ def main():
                                 if extofext[HEAD] != ext[ID]:
                                     continue
                                 if (extofext[UPOS] == 'ADP' or (
-                                    extofext[UPOS] == 'PART' and
-                                    INPUTLANG in XCOMP_PARTICLE and
-                                    extofext[LEMMA] == XCOMP_PARTICLE[INPUTLANG]
+                                        extofext[UPOS] == 'PART' and
+                                        INPUTLANG in XCOMP_PARTICLE and
+                                        extofext[LEMMA] == XCOMP_PARTICLE[INPUTLANG]
                                 )):
                                     prep = extofext[LEMMA].lower()
                                     # 'de': handle german contractions: am -> an
@@ -198,9 +195,9 @@ def main():
                             # lemma / handle pronouns
                             # -- only reflexive and rcp are needed as lemma
                             if (ext[UPOS] == 'PRON' and
-                                ext[FEATS_DIC].get('Reflex', 'notdef') != 'Yes' and # 'itself'
-                                ext[FEATS_DIC].get('PronType', 'notdef') != 'Rcp' and # 'each other'
-                                ext[LEMMA] not in PRON_LEMMAS
+                                    ext[FEATS_DIC].get('Reflex', 'notdef') != 'Yes' and  # 'itself'
+                                    ext[FEATS_DIC].get('PronType', 'notdef') != 'Rcp' and  # 'each other'
+                                    ext[LEMMA] not in PRON_LEMMAS
                             ):
                                 lemma = "NULL"
 
@@ -251,4 +248,4 @@ def get_args():
 
 
 if __name__ == '__main__':
-        main()
+    main()
