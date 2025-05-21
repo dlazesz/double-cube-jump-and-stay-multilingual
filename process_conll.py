@@ -78,9 +78,9 @@ def main():
                 feats_dic = {}
                 if feats != '_':
                     try:
-                        feats_dic = {x: y
-                                     for x, y in (e.split(FEAT_VAL_SEP, 1)
-                                                  for e in feats.split(FEAT_ITEM_SEP))}
+                        for e in feats.split(FEAT_ITEM_SEP):
+                            x, y = e.split(FEAT_VAL_SEP, maxsplit=1)
+                            feats_dic[x] = y
                     except ValueError:
                         print(f'FATAL: {feats} :: {{{"}{".join(row)}}}')
                         exit(1)
@@ -208,9 +208,10 @@ def main():
 
                     # print out the verb centered construction
                     # = verb + exts (in alphabetical order)
-                    for x in [f'stem@@{verb_lemma}'] + sorted(exts):
-                        print('', x, end='')
-                    print()
+                    exts_formatted = ''
+                    if len(exts) > 0:
+                        exts_formatted = f' {" ".join(sorted(exts))}'
+                    print(f'stem@@{verb_lemma}{exts_formatted}')
 
                 print('\n-----\n')
                 sentence = []
