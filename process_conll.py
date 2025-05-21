@@ -8,7 +8,9 @@ from verbs and their direct exts.
 
 import csv
 import sys
+import logging
 import argparse
+import fileinput
 
 # CoNLL fields -- last two added by this module
 (ID, FORM, LEMMA, UPOS, XPOS, FEATS, HEAD, DEPREL, DEPS, MISC,
@@ -55,6 +57,24 @@ PRON_LEMMAS = [  # based directly on lemma
 
 # ----- end of tricks
 
+def setup_logger(verbose=True):
+    logger = logging.getLogger('process_conll')
+    if verbose:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+    logger.setLevel(level)
+
+    # Avoid adding multiple handlers if already configured
+    if not logger.handlers:
+        handler = logging.StreamHandler(sys.stdout)
+        formatter = logging.Formatter('%(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.propagate = False  # Prevent double logging from root
+
+    return logger
+
 
 def main():
     """
@@ -64,8 +84,11 @@ def main():
     args = get_args()
     filename = args.input_file
     inputlang = args.language
+    include_unknown_slots = args.include_unknown_slots
 
-    with open(filename, encoding='UTF-8') as fd:
+    logger = setup_logger(args.verbose)
+
+    with fileinput.input(filename, encoding='UTF-8') as fd:
         rd = csv.reader(fd, delimiter='\t', quoting=csv.QUOTE_NONE)  # no quoting
         sentence = []
         for row in rd:
@@ -82,9 +105,9 @@ def main():
                             x, y = e.split(FEAT_VAL_SEP, maxsplit=1)
                             feats_dic[x] = y
                     except ValueError:
-                        print(f'FATAL: {feats} :: {{{"}{".join(row)}}}')
+                        logger.critical(f'FATAL: {feats} :: {{{"}{".join(row)}}}')
                         exit(1)
-                print(sorted(feats_dic))
+                logger.debug(sorted(feats_dic))
 
                 # determine "slot" = the category of the word as an ext
                 slot = NOSLOT
@@ -130,7 +153,7 @@ def main():
             else:  # empty line = end of sentence => process the whole sentence
 
                 for root in sentence:
-                    print(' '.join(root[ID:DEPS]))
+                    logger.debug(' '.join(root[ID:DEPS]))
 
                     if root[UPOS] != ROOT_UPOS:
                         continue
@@ -196,7 +219,8 @@ def main():
                             ):
                                 lemma = 'NULL'
 
-                            exts.append(f'{slot}@@{lemma}')
+                            if slot != '_' or include_unknown_slots:
+                                exts.append(f'{slot}@@{lemma}')
 
                         # add verb particle / preverb to the verb lemma
                         # verb particle / preverb must be a NOSLOT!
@@ -211,9 +235,9 @@ def main():
                     exts_formatted = ''
                     if len(exts) > 0:
                         exts_formatted = f' {" ".join(sorted(exts))}'
-                    print(f'stem@@{verb_lemma}{exts_formatted}')
+                    logger.info(f'stem@@{verb_lemma}{exts_formatted}')
 
-                print('\n-----\n')
+                logger.debug('\n-----\n')
                 sentence = []
 
 
@@ -226,10 +250,9 @@ def get_args():
     # string-valued argument
     parser.add_argument(
         '-i', '--input-file',
-        help='CoNLL(-like) input file',
-        required=True,
+        help='CoNLL(-like) input file or STDIN (default)',
         type=str,
-        default=argparse.SUPPRESS
+        default='-'
     )
     # string-valued argument
     parser.add_argument(
@@ -239,6 +262,32 @@ def get_args():
         type=str,
         default=argparse.SUPPRESS
     )
+    # bool-valued argument
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        '--include-unknown-slots',
+        dest='include_unknown_slots',
+        action='store_true',
+        default=True,
+        help='Include unknown slots (_@@) for debuging purposes')
+    group.add_argument(
+        '--no-include-unknown-slots',
+        dest='include_unknown_slots',
+        action='store_false',
+        help='Don not include unknown slots (_@@) for debuging purposes')
+    # bool-valued argument
+    group2 = parser.add_mutually_exclusive_group()
+    group2.add_argument(
+        '-v', '--verbose',
+        dest='verbose',
+        action='store_true',
+        default=True,
+        help='Print debug information as well')
+    group2.add_argument(
+        '-q', '--quiet',
+        dest='verbose',
+        action='store_false',
+        help='Print the found constructions only')
 
     return parser.parse_args()
 
