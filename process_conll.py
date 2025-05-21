@@ -6,9 +6,9 @@ from verbs and their direct exts.
 (ext in {dependent, argument, complement, adjunct})
 """
 
-import argparse
 import csv
 import sys
+import argparse
 
 # CoNLL fields -- last two added by this module
 (ID, FORM, LEMMA, UPOS, XPOS, FEATS, HEAD, DEPREL, DEPS, MISC,
@@ -56,10 +56,6 @@ PRON_LEMMAS = [  # based directly on lemma
 # ----- end of tricks
 
 
-def print_token(t):
-    print(' '.join(t[ID:DEPS]))
-
-
 def main():
     """
     Process sentences.
@@ -67,27 +63,26 @@ def main():
     """
     args = get_args()
     filename = args.input_file
-    INPUTLANG = args.language
+    inputlang = args.language
 
-    with open(filename) as fd:
-        rd = csv.reader(fd, delimiter="\t", quoting=csv.QUOTE_NONE)  # no quoting
+    with open(filename, encoding='UTF-8') as fd:
+        rd = csv.reader(fd, delimiter='\t', quoting=csv.QUOTE_NONE)  # no quoting
         sentence = []
         for row in rd:
-            if len(row) == 1 and row[0][0] == "#":  # comment line
+            if len(row) == 1 and row[0][0] == '#':  # comment line
                 continue
-            if row:  # line is not empty => process this token
+            if len(row) > 0:  # line is not empty => process this token
 
                 # feats -> feats_dic (specific format -> python data structure)
                 feats = row[FEATS]
-                if feats == '_':
-                    feats_dic = {}
-                else:
+                feats_dic = {}
+                if feats != '_':
                     try:
                         feats_dic = {x: y
                                      for x, y in (e.split(FEAT_VAL_SEP, 1)
                                                   for e in feats.split(FEAT_ITEM_SEP))}
                     except ValueError:
-                        print("FATAL: " + feats + ' :: {' + '}{'.join(row) + '}')
+                        print(f'FATAL: {feats} :: {{{"}{".join(row)}}}')
                         exit(1)
                 print(sorted(feats_dic))
 
@@ -97,10 +92,10 @@ def main():
                 # 0. basic arguments
                 #    * UD: we need them here because 'Case' feature is mostly missing
                 #    * e-magyar: this step is not needed as we always have 'Case' feature
-                if row[DEPREL] in [
+                if row[DEPREL] in {
                     #'NEG',
                     'nsubj', 'obj', 'iobj', 'obl'
-                ]:
+                }:
                     slot = row[DEPREL]
 
                 # 1. if not present: take the 'Case' feature
@@ -112,10 +107,10 @@ def main():
                 # 2. if not present: other deprel
                 #    * UD: case, xcomp <- http://ud.org/u/dep
                 #    * e-magyar: INF
-                elif row[DEPREL] in [
+                elif row[DEPREL] in {
                     'case', 'xcomp',
                     'INF',
-                ]:
+                }:
                     slot = row[DEPREL]
 
                 # 3. if not present: Hungarian postposition
@@ -135,7 +130,7 @@ def main():
             else:  # empty line = end of sentence => process the whole sentence
 
                 for root in sentence:
-                    print_token(root)
+                    print(' '.join(root[ID:DEPS]))
 
                     if root[UPOS] != ROOT_UPOS:
                         continue
@@ -173,22 +168,22 @@ def main():
                                     continue
                                 if (extofext[UPOS] == 'ADP' or (
                                         extofext[UPOS] == 'PART' and
-                                        INPUTLANG in XCOMP_PARTICLE and
-                                        extofext[LEMMA] == XCOMP_PARTICLE[INPUTLANG]
+                                        inputlang in XCOMP_PARTICLE and
+                                        extofext[LEMMA] == XCOMP_PARTICLE[inputlang]
                                 )):
                                     prep = extofext[LEMMA].lower()
                                     # 'de': handle german contractions: am -> an
-                                    if INPUTLANG == 'de' and prep in DE_CONTRACTIONS:
+                                    if inputlang == 'de' and prep in DE_CONTRACTIONS:
                                         prep = DE_CONTRACTIONS[prep]
-                                    slot += '=' + prep
+                                    slot += f'={prep}'
                                 # handle e-magyar Hungarian postpositions
                                 # which are annotated inversely -> should be inverted
                                 if slot == 'NU':
-                                    slot = extofext[FEATS_DIC].get('Case', 'notdef') + '=' + ext[LEMMA]
+                                    slot = '='.join((extofext[FEATS_DIC].get('Case', 'notdef'), ext[LEMMA]))
                                     ext[LEMMA] = extofext[LEMMA]
                                 # adjective as second level ext (in a multilevel setting!)
                                 #if extofext[DEPREL] == 'ATT' and extofext[UPOS] == 'ADJ':
-                                #    exts.append(slot + '+ATT' + '@@' + extofext[LEMMA])  
+                                #    exts.append(slot + '+ATT' + '@@' + extofext[LEMMA])
 
                             # lemma
                             lemma = ext[LEMMA].lower()
@@ -199,9 +194,9 @@ def main():
                                     ext[FEATS_DIC].get('PronType', 'notdef') != 'Rcp' and  # 'each other'
                                     ext[LEMMA] not in PRON_LEMMAS
                             ):
-                                lemma = "NULL"
+                                lemma = 'NULL'
 
-                            exts.append(slot + '@@' + lemma)
+                            exts.append(f'{slot}@@{lemma}')
 
                         # add verb particle / preverb to the verb lemma
                         # verb particle / preverb must be a NOSLOT!
@@ -213,11 +208,11 @@ def main():
 
                     # print out the verb centered construction
                     # = verb + exts (in alphabetical order)
-                    for x in ['stem@@' + verb_lemma] + sorted(exts):
+                    for x in [f'stem@@{verb_lemma}'] + sorted(exts):
                         print('', x, end='')
                     print()
 
-                print("\n-----\n")
+                print('\n-----\n')
                 sentence = []
 
 
