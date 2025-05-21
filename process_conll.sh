@@ -17,6 +17,6 @@ BASE=$(basename "$INPUTFILE")
 O1=${BASE}.verbose
 O2=${BASE}
 
-python3 ./process_conll.py --input-file "$INPUTFILE" --language "$INPUTLANG" > "$ODIR/$O1"
-grep -F "stem@@" "$ODIR/$O1" | sed "s/ _@@[^ ][^ ]*//g" | sort | uniq -c | sort -nr > "$ODIR/$O2"
+python3 ./process_conll.py --input-file "$INPUTFILE" --language "$INPUTLANG" --logfile "$ODIR/$O1" \
+ | sort | uniq -c | sort -nr > "$ODIR/$O2"
 

@@ -57,21 +57,40 @@ PRON_LEMMAS = [  # based directly on lemma
 
 # ----- end of tricks
 
-def setup_logger(verbose=True):
-    logger = logging.getLogger('process_conll')
-    if verbose:
-        level = logging.DEBUG
+# Helper to add a handler
+def add_handler(logger, stream_or_file, level, formatter):
+    if stream_or_file in {sys.stdout, sys.stderr}:
+        handler = logging.StreamHandler(stream_or_file)
     else:
-        level = logging.INFO
-    logger.setLevel(level)
+        handler = logging.FileHandler(stream_or_file)
+    handler.setLevel(level)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+
+def setup_logger(log_file):
+    logger = logging.getLogger('process_conll')
+    # Always capture everything; handlers will filter
+    logger.setLevel(logging.DEBUG)
+    # Prevent double logging from root
+    logger.propagate = False
 
     # Avoid adding multiple handlers if already configured
-    if not logger.handlers:
-        handler = logging.StreamHandler(sys.stdout)
+    if len(logger.handlers) == 0:
+        # Define common log format
         formatter = logging.Formatter('%(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.propagate = False  # Prevent double logging from root
+
+        if log_file == '-':
+            # Log everything to STDOUT at DEBUG level
+            add_handler(logger, sys.stdout, logging.DEBUG, formatter)
+        elif log_file is not None:
+            # Log INFO to STDOUT
+            add_handler(logger, sys.stdout, logging.INFO, formatter)
+            # Log DEBUG to file
+            add_handler(logger, log_file, logging.DEBUG, formatter)
+        else:
+            # Only log INFO to STDOUT
+            add_handler(logger, sys.stdout, logging.INFO, formatter)
 
     return logger
 
@@ -84,9 +103,14 @@ def main():
     args = get_args()
     filename = args.input_file
     inputlang = args.language
+    logfile = args.logfile
     include_unknown_slots = args.include_unknown_slots
+    if logfile == '-' and not include_unknown_slots:
+        print('--logfile - and --no-include-unknown-slots are mutually exclusive to prevent duplications!',
+              file=sys.stderr)
+        exit(1)
 
-    logger = setup_logger(args.verbose)
+    logger = setup_logger(logfile)
 
     with fileinput.input(filename, encoding='UTF-8') as fd:
         rd = csv.reader(fd, delimiter='\t', quoting=csv.QUOTE_NONE)  # no quoting
@@ -219,8 +243,7 @@ def main():
                             ):
                                 lemma = 'NULL'
 
-                            if slot != '_' or include_unknown_slots:
-                                exts.append(f'{slot}@@{lemma}')
+                            exts.append(f'{slot}@@{lemma}')
 
                         # add verb particle / preverb to the verb lemma
                         # verb particle / preverb must be a NOSLOT!
@@ -232,10 +255,23 @@ def main():
 
                     # print out the verb centered construction
                     # = verb + exts (in alphabetical order)
-                    exts_formatted = ''
+                    exts_out = ''
                     if len(exts) > 0:
-                        exts_formatted = f' {" ".join(sorted(exts))}'
-                    logger.info(f'stem@@{verb_lemma}{exts_formatted}')
+                        exts_sorted = sorted(exts)
+                        exts_out = f' {" ".join(exts_sorted)}'
+                        if not include_unknown_slots:
+                            exts_sorted_wo_unknown_slots = [ext for ext in exts_sorted if not ext.startwith('_@@')]
+                            if len(exts_sorted_wo_unknown_slots) > 0:
+                                ext_out_w_unknown = exts_out
+                                exts_out = f' {" ".join(exts_sorted_wo_unknown_slots)}'
+
+                    #     include_unknown_slots: info == debug -> log to info (appears in both)
+                    # not include_unknown_slots: info != debug -> log to both (debug includes unknown slots)
+                    # not include_unknown_slots and logfile == '-' -> Conflict, handled elsewhere!
+                    if not include_unknown_slots and logfile != '-':
+                        logger.debug(f'stem@@{verb_lemma}{ext_out_w_unknown}')
+
+                    logger.info(f'stem@@{verb_lemma}{exts_out}')
 
                 logger.debug('\n-----\n')
                 sentence = []
@@ -262,6 +298,13 @@ def get_args():
         type=str,
         default=argparse.SUPPRESS
     )
+    # string-valued argument
+    parser.add_argument(
+        '--logfile',
+        help="A logfile to write debug information ('-' for verbose mode on STDOUT)",
+        type=str,
+        default=None
+    )
     # bool-valued argument
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -275,19 +318,6 @@ def get_args():
         dest='include_unknown_slots',
         action='store_false',
         help='Don not include unknown slots (_@@) for debuging purposes')
-    # bool-valued argument
-    group2 = parser.add_mutually_exclusive_group()
-    group2.add_argument(
-        '-v', '--verbose',
-        dest='verbose',
-        action='store_true',
-        default=True,
-        help='Print debug information as well')
-    group2.add_argument(
-        '-q', '--quiet',
-        dest='verbose',
-        action='store_false',
-        help='Print the found constructions only')
 
     return parser.parse_args()
 
