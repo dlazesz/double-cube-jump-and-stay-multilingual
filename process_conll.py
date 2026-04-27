@@ -6,6 +6,7 @@ from verbs and their direct exts.
 (ext in {dependent, argument, complement, adjunct})
 """
 
+import json
 import sys
 import logging
 import argparse
@@ -158,12 +159,12 @@ def parse_feats_dict(feats: str, row):
     return feats_dic
 
 
-def print_vcc(verb_lemma, exts, include_unknown_slots, logfile, logger):
+def print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, logger):
     """Print out the verb centered construction = verb + exts (in alphabetical order)"""
     exts_out = ''
     ext_out_w_unknown = ''
+    exts_sorted = sorted(exts)
     if len(exts) > 0:
-        exts_sorted = sorted(exts)
         exts_out = f' {" ".join(exts_sorted)}'
         if not include_unknown_slots:
             exts_sorted_wo_unknown_slots = [ext for ext in exts_sorted if not ext.startswith('_@@')]
@@ -177,7 +178,15 @@ def print_vcc(verb_lemma, exts, include_unknown_slots, logfile, logger):
     if not include_unknown_slots and logfile != '-':
         logger.debug(f'stem@@{verb_lemma}{ext_out_w_unknown}')
 
-    logger.info(f'stem@@{verb_lemma}{exts_out}')
+    if output_format == 'JSON':
+        # Dummy freq for later
+        out = {'fq': 0, 'stem': verb_lemma}
+        out.update(ext.replace('POSS', '').split('@@', maxsplit=1) for ext in exts_sorted if not ext.startswith('_@@'))
+        logger.info(json.dumps(out, ensure_ascii=False))
+    elif output_format == 'mazsola':
+        logger.info(f'stem@@{verb_lemma}{exts_out}')
+    else:
+        raise NotImplementedError(f'Unknown output format: {output_format}')
 
 
 def build_index_for_sentence(sentence, logger):
@@ -198,7 +207,7 @@ def build_index_for_sentence(sentence, logger):
     return children, by_id, roots
 
 
-def process_sentence(sentence, inputlang, include_unknown_slots, logfile, logger: Logger):
+def process_sentence(sentence, inputlang, include_unknown_slots, output_format, logfile, logger: Logger):
     children, by_id, roots = build_index_for_sentence(sentence, logger)
 
     xcomp_particle = XCOMP_PARTICLE.get(inputlang)
@@ -268,7 +277,7 @@ def process_sentence(sentence, inputlang, include_unknown_slots, logfile, logger
         # handle special 'perverb+verb' format in UD/hu -> delete the '+'
         verb_lemma = verb_lemma.replace('+', '')
 
-        print_vcc(verb_lemma, exts, include_unknown_slots, logfile, logger)
+        print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, logger)
 
 
 def main():
@@ -280,6 +289,7 @@ def main():
     inputlang = args.language
     logfile = args.logfile
     include_unknown_slots = args.include_unknown_slots
+    output_format = args.output_format
     if logfile == '-' and not include_unknown_slots:
         print('--logfile - and --no-include-unknown-slots are mutually exclusive to prevent duplications!',
               file=sys.stderr)
@@ -306,14 +316,14 @@ def main():
                 sentence.append(row)
 
             elif len(row) == 0:  # Empty line = end of sentence => process the whole sentence
-                process_sentence(sentence, inputlang, include_unknown_slots, logfile, logger)
+                process_sentence(sentence, inputlang, include_unknown_slots, output_format, logfile, logger)
                 logger.debug('\n-----\n')
                 sentence.clear()
             else:
                 raise NotImplementedError('This should not happen!')
 
         if len(sentence) > 0:  # Final sentence if there is no empty line at the end of file
-            process_sentence(sentence, inputlang, include_unknown_slots, logfile, logger)
+            process_sentence(sentence, inputlang, include_unknown_slots, output_format, logfile, logger)
             logger.debug('\n-----\n')
 
 
@@ -334,6 +344,12 @@ def get_args():
         help='2-letter language code for language specific tricks',
         required=True,
         type=str
+    )
+    parser.add_argument(
+        "-f", "--output_format",
+        choices=["JSON", "mazsola"],
+        default="mazsola",
+        help="Output format: JSON or mazsola (default: mazsola)"
     )
     parser.add_argument(
         '--logfile',
