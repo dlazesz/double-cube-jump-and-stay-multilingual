@@ -10,47 +10,22 @@ cl_edges_back = {}  # backward edges (= "in"-edges) down in cl
 cl_edges_fwrd = {}  # forward edges (= "out"-edges) up in cl
 
 
-# fixed order (of slots) is important -- nothing to be done here for this
-# what we do: always process dicts by sorted_keys{}
-# input should be JSON dict indeed! :)
-# remark: currently this is used only at very first load...
-def json2dict(x):
-    j = None
-    try:
-        j = json.loads(x, encoding="UTF-8")
-    except ValueError as err:
-        sys.stderr.write("ValueError: {}".format(err) + "{" + x + "}\n")
-        exit(1)
-    return j
-
-
-# keys of a dict in alphabetical order
-def sorted_keys(d):
-    return sorted(d.keys())
-
-
 # point: store dicts as JSON when used for key in dicts
 # ensuring fixed order:
 #   put keys and values into a list ordered by key: [ k1, v1, k2, v2 ... ]
 def dict2jsonarray(x):
     z = []
-    keys = sorted_keys(x)
+    keys = sorted(x.keys())
     for k in keys:
         z.append(k)
         z.append(x[k])
     return json.dumps(z, ensure_ascii=False)
 
 
-# input: vcc (as dict)
-# output: length of vcc
-def vcc_length(x):
-    return len(x.keys()) + len(list(filter(lambda x: x is not None, x.values())))
-
-
 # from a vcc ('d') calculates vccs "shorter by 1" element ('e') recursively,
 # and record the resulting edges and vertices
 def build_dc_recursively(d, fq, vertices_f, vertices_l, edges_back, edges_fwrd):
-    slots = sorted_keys(d)
+    slots = sorted(d.keys())
     dj = dict2jsonarray(d)  # vcc: dict format -> string format (= key!)
 
     # "shorter by 1" elements = every slot is to be shortened by 1 respectively
@@ -85,32 +60,30 @@ def build_dc_recursively(d, fq, vertices_f, vertices_l, edges_back, edges_fwrd):
             #    a given vertex only once!
             # -- this implements the metric on the poster
             vertices_f[ej] = fq
-            vertices_l[ej] = vcc_length(e)
+            vertices_l[ej] = len(e.keys()) + len(list(filter(lambda x: x is not None, e.values())))
             if len(e) > 0:
                 build_dc_recursively(e, fq, vertices_f, vertices_l, edges_back, edges_fwrd)
 
 
 # -----
 
-# -- build the corpus lattice
+# -- Build the corpus lattice
 
 for line in sys.stdin:
-    d = json2dict(line)
+    try:
+        d = json.loads(line)
+    except ValueError as err:
+        print(f"ValueError: {err}{{{line}}}", file=sys.stderr)
+        exit(1)
+
     fq = d.pop('fq', None)
 
-    # handling "NULL" lemmas, e.g. Hungarian "ACC":"NULL"
-    # = definite conjugation means "ACC":"NULL"
-    #   instead of this there we be a vcc "shorter by 1" = "ACC":None
-    for k in d:
-        if d[k] == 'NULL':
-            d[k] = None
-
-    # adding subjects -- hack, because Hungarian is pro-drop
+    # Adding subjects -- hack, because Hungarian is pro-drop
     # = if there is no SUBJECT_SLOT => add SUBJECT_SLOT:None
     if SUBJECT_SLOT not in d:
         d[SUBJECT_SLOT] = None
 
-    # data for the given sentence skeleton (ss):
+    # Data for the given sentence skeleton (ss):
     dvfq = {}  # vertex-data: freqs
     dvl = {}  # vertex-data: lengths
     de = {}  # edge-data
@@ -121,7 +94,7 @@ for line in sys.stdin:
 
     # put in the ss
     # XXX ugly: code repetition from build_dc_recursively()
-    length = vcc_length(d)
+    length = len(d.keys()) + len(list(filter(lambda x: x is not None, d.values())))
     dvfq[dj] = fq
     dvl[dj] = length  # = cnt of slots + cnt of fillers
 
@@ -165,16 +138,6 @@ JMP3 = 100000000  # above this  backward:jump  (if omitting last filler)
 # 3. "full-free jump and stay" = 4,4,inf -> this is in the paper!
 # 4. "refined jump and stay" = 4,9,100
 
-def print_msg(msg):
-    print(' {0}'.format(msg))
-
-
-def print_simple(i):
-    fq = cl_vertices_f[i]
-    l = cl_vertices_l[i]
-    # current vertex
-    print('{0}\t{1}\t{2}'.format(i, fq, l))
-
 
 def print_full(i):
     fq = cl_vertices_f[i]
@@ -190,8 +153,7 @@ def print_full(i):
                 cl = '= !stay'
             if ratio > JMP1:
                 cl = '^'
-            print('->  {0}  {1:2.2f}  {2}  {3}'.format(
-                cl_vertices_f[j], ratio, j, cl))
+            print(f'->  {cl_vertices_f[j]}  {ratio:2.2f}  {j}  {cl}')
     print('x')
 
     # backward edges -- for "jump"
@@ -205,11 +167,13 @@ def print_full(i):
                 cl = '='
             if ratio > JMP1:
                 cl = '^ !jump'
-            print('<-  {0}  {1:2.2f}  {2}  {3}'.format(
-                cl_vertices_f[j], ratio, j, cl))
+            print(f'<-  {cl_vertices_f[j]}  {ratio:2.2f}  {j}  {cl}')
     print('x')
 
-    print_simple(i)
+    fq1 = cl_vertices_f[i]
+    l = cl_vertices_l[i]
+    # Current vertex
+    print(i, fq1, l, sep='\t')
 
 
 # fq-ratio on a..b edge (there must be an a..b edge!)
@@ -250,7 +214,7 @@ def is_top_of_cl(x):
 n = 1
 for i in sorted(cl_vertices_f, key=lambda x: (cl_vertices_l[x], -cl_vertices_f[x], x)):
 
-    print('#{0}'.format(n))
+    print(f'#{n}')
     n += 1
 
     print_full(i)
@@ -260,13 +224,13 @@ for i in sorted(cl_vertices_f, key=lambda x: (cl_vertices_l[x], -cl_vertices_f[x
     #  -- only if fq >= 3
     #  -- only if l <= 8
     if i not in cl_edges_fwrd:
-        print_msg('No out-edge, skip.')
+        print(' No out-edge, skip.')
     elif cl_vertices_f[i] < 3:
-        print_msg('Too rare (<3), skip.')
+        print(' Too rare (<3), skip.')
     elif cl_vertices_l[i] > 8:
-        print_msg('Too long (>8), skip.')
+        print(' Too long (>8), skip.')
     else:
-        print_msg('Processing.')
+        print(' Processing.')
         d = cl_edges_fwrd[i]  # forward edges -- is this line redundant? XXX
 
         # how does it work
@@ -300,14 +264,15 @@ for i in sorted(cl_vertices_f, key=lambda x: (cl_vertices_l[x], -cl_vertices_f[x
                 max_out = max(d.keys(), key=lambda x: (cl_vertices_f[x], x))
 
             if max_out and is_stay(act, max_out):
-                print_msg('A stay found, we follow.')
+                print(' A stay found, we follow.')
                 path.append('v')
-                print_simple(max_out)
+                # Current vertex
+                print(max_out, cl_vertices_f[max_out], cl_vertices_l[max_out], sep='\t')
                 act = max_out
 
             else:
-                print_msg('No stay (ratio={0:2.2f} > {1}), we stop.'.format(
-                    ratio(act, max_out) if max_out else 0, STAY))
+                r1, r2 = ratio(act, max_out) if max_out else float('inf'), STAY
+                print(f' No stay (ratio={r1:2.2f} > {r2}), we stop.')
                 stay_found = False
 
                 # if no stay, is there a(n appropriate) jump?
@@ -341,21 +306,22 @@ for i in sorted(cl_vertices_f, key=lambda x: (cl_vertices_l[x], -cl_vertices_f[x
                         info_msg = 'omitting last filler'
                         jump_type = 't(o)'
                     else:
-                        print_msg('impossible outcome')  # as we covered all possibilities
+                        print(' impossible outcome')
                         exit(1)
 
                     # check whether the jump is OK
                     if is_jump(max_inn, act, jump):
-                        print_msg('An appropriate jump ({0}, {1}<) found, we follow.'.format(info_msg, jump))
+                        print(f' An appropriate jump ({info_msg}, {jump}<) found, we follow.')
                         path.append(jump_type)
-                        print_simple(max_inn)
+                        # Current vertex
+                        print(max_inn, cl_vertices_f[max_inn], cl_vertices_l[max_inn], sep='\t')
                         act = max_inn
                     else:
-                        print_msg('No appropriate jump ({0}, {1:2.2f} < {2}), we stop.'.format(info_msg, r, jump))
+                        print(f' No appropriate jump ({info_msg}, {r:2.2f} < {jump}), we stop.')
                         jump_found = False
 
                 else:
-                    print_msg('No backward edge -- no jump, we stop.')  # at root vertex
+                    print(' No backward edge -- no jump, we stop.')
                     jump_found = False
 
             # quit the loop when no step was made
@@ -365,10 +331,10 @@ for i in sorted(cl_vertices_f, key=lambda x: (cl_vertices_l[x], -cl_vertices_f[x
         # current implementation: no ss can be a pVCC -- THINK ABOUT IT!
         # because there are pVCCS like 'shine sun'
         if is_top_of_cl(act):
-            print_msg('Concrete sentence skeleton.')
+            print(' Concrete sentence skeleton.')
 
         else:
             #pathstr = '0' if not path else ''.join( path )
-            #print( '{0}\t{1}\t{2}\t[{3}]\tpVCC'.format( act, cl_vertices_f[act], cl_vertices_l[act], pathstr ))
-            print('{0}\t{1}\t{2}\tpVCC'.format(act, cl_vertices_f[act], cl_vertices_l[act]))
+            #print(act,cl_vertices_f[act], cl_vertices_l[act], f'[{pathstr}]', pVCC, sep='\t')
+            print(act, cl_vertices_f[act], cl_vertices_l[act], 'pVCC', sep='\t')
     print()

@@ -182,6 +182,9 @@ def print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, l
         # Dummy freq for later
         out = {'fq': 0, 'stem': verb_lemma}
         out.update(ext.replace('POSS', '').split('@@', maxsplit=1) for ext in exts_sorted if not ext.startswith('_@@'))
+        for k, v in out.items():
+            if v == 'NULL':
+                out[k] = None
         logger.info(json.dumps(out, ensure_ascii=False))
     elif output_format == 'mazsola':
         logger.info(f'stem@@{verb_lemma}{exts_out}')
