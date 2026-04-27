@@ -17,11 +17,19 @@ OUTPUT=$(basename "$INPUTFILE")
 # 20 esetén már pár magyar ige is akad... :)
 FQTH=20
 
-# get verbs
+# Get verbs
 sed "s/.*stem@@//;s/ .*//" "$INPUTFILE" | sort | uniq -c | sort -nr | \
   awk -v fqth="$FQTH" '$1 >= fqth' | sed "s/^ *[0-9]* *//" \
   > "$ODIR/${INPUTLANG}.verbs"
 
+# For verbs above the threshold create a separate file with
+# 1. All lines of the actual verb
+# 2. {"fq": frequency
+# 3. Delete anonymous slots
+# 4. SLOT@@VAL -> , "SLOT": "VAL"
+# 5. Close JSON }
+# 6. Remove space between val and comma
+# 7. Remove POSS
 while read -r VERB; do
   grep -E "stem@@$VERB( |$)" "$INPUTFILE" | sed "s/stem@@$VERB *//" | \
     sed 's/^ *//;s/^\([0-9][0-9]*\)/{"fq": \1/;s/ @@[^ ][^ ]*//g;s/\([^ ][^ ]*\)@@\([^ ][^ ]*\)/, "\1": "\2"/g;s/$/}/;s/ *,/,/g;s/POSS//g' \
