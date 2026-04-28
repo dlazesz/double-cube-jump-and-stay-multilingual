@@ -181,7 +181,11 @@ def print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, l
     if output_format == 'JSON':
         # Dummy freq for later
         out = {'fq': 0, 'stem': verb_lemma}
-        out.update(ext.replace('POSS', '').split('@@', maxsplit=1) for ext in exts_sorted if not ext.startswith('_@@'))
+        # TODO this line kills double keys!
+        # Space, literal qoute (\") and at sign (@) in value is handled incorrectly in the original code
+        # TODO originally stem not in JSON (JSON is generated as a separate step)
+        out.update(ext.replace('POSS', '').replace(' ', '_').split('@@', maxsplit=1)
+                   for ext in exts_sorted if not ext.startswith('_@@'))
         for k, v in out.items():
             if v == 'NULL':
                 out[k] = None
