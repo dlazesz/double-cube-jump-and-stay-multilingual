@@ -1,14 +1,6 @@
 import sys
 import json
 
-SUBJECT_SLOT = sys.argv[1]  # XXX
-
-# corpus lattice
-cl_vertices_f = {}  # freq of vertices
-cl_vertices_l = {}  # length of VCCs at vertices
-cl_edges_back = {}  # backward edges (= "in"-edges) down in cl
-cl_edges_fwrd = {}  # forward edges (= "out"-edges) up in cl
-
 
 # from a vcc ('d') calculates vccs "shorter by 1" element ('e') recursively,
 # and record the resulting edges and vertices
@@ -53,81 +45,7 @@ def build_dc_recursively(d, fq, vertices_f, vertices_l, edges_back, edges_fwrd):
                 build_dc_recursively(e, fq, vertices_f, vertices_l, edges_back, edges_fwrd)
 
 
-# -----
-
-# -- Build the corpus lattice
-
-for line in sys.stdin:
-    try:
-        d = json.loads(line)
-    except ValueError as err:
-        print(f"ValueError: {err}{{{line}}}", file=sys.stderr)
-        exit(1)
-
-    fq = d.pop('fq', None)
-
-    # Adding subjects -- hack, because Hungarian is pro-drop
-    # = if there is no SUBJECT_SLOT => add SUBJECT_SLOT:None
-    if SUBJECT_SLOT not in d:
-        d[SUBJECT_SLOT] = None
-
-    # Data for the given sentence skeleton (ss):
-    dvfq = {}  # vertex-data: freqs
-    dvl = {}  # vertex-data: lengths
-    de = {}  # edge-data
-    deb = {}  # edge-data -- backwards!
-
-    dj = json.dumps(dict(sorted(d.items())), ensure_ascii=False)  # vcc: dict format -> string format (= key!)
-    # XXX maybe: dj = line -- there would be no need for converting forth and back
-
-    # put in the ss
-    # XXX ugly: code repetition from build_dc_recursively()
-    length = len(d.keys()) + len(list(filter(lambda x: x is not None, d.values())))
-    dvfq[dj] = fq
-    dvl[dj] = length  # = cnt of slots + cnt of fillers
-
-    build_dc_recursively(d, fq, dvfq, dvl, de, deb)
-    # algo: edges and vertices for each ss
-    # plus: put together afterwards below -- THAT IS OK!
-
-    # transfer vertices of the given ss into main 'cl_vertices_f': freqs
-    for k in dvfq:
-        if k not in cl_vertices_f:
-            cl_vertices_f[k] = dvfq[k]
-        else:
-            cl_vertices_f[k] += dvfq[k]
-    # transfer vertices of the given ss into main 'cl_vertices_l': vcc lengths
-    for k in dvl:
-        if k not in cl_vertices_l:
-            cl_vertices_l[k] = dvl[k]
-    # transfer edges of the given ss into main 'cl_edges_back'
-    for i in de:
-        for j in de[i]:
-            if i not in cl_edges_back:
-                cl_edges_back[i] = {}
-            cl_edges_back[i][j] = 1
-    # transfer edges of the given ss into main 'cl_edges_fwrd'
-    for i in deb:
-        for j in deb[i]:
-            if i not in cl_edges_fwrd:
-                cl_edges_fwrd[i] = {}
-            cl_edges_fwrd[i][j] = 1
-
-# -----
-
-# idea #3: "jump and stay from root vertex"
-
-STAY = 1.7  # below this  forward:stay
-JMP1 = 4  # above this  backward:jump  (if keeping a filler)
-JMP2 = 4  # above this  backward:jump  (if no filler)
-JMP3 = 100000000  # above this  backward:jump  (if omitting last filler)
-
-
-# 3. "full-free jump and stay" = 4,4,inf -> this is in the paper!
-# 4. "refined jump and stay" = 4,9,100
-
-
-def print_full(i):
+def print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, STAY, JMP1):
     fq = cl_vertices_f[i]
 
     # forward edges -- for "stay"
@@ -164,148 +82,227 @@ def print_full(i):
     print(i, fq1, l, sep='\t')
 
 
-# take all vertices and filter out which is not needed
-# point: not to miss any which is needed! :)
+def main():
+    # -- Build the corpus lattice
 
-# process in a king of "good" order: 
-# according to length, then reverse fq (by '-' trick), then alphabetical order
-n = 1
-for i in sorted(cl_vertices_f, key=lambda x: (cl_vertices_l[x], -cl_vertices_f[x], x)):
+    # idea #3: "jump and stay from root vertex"
 
-    print(f'#{n}')
-    n += 1
+    STAY = 1.7  # below this  forward:stay
+    JMP1 = 4  # above this  backward:jump  (if keeping a filler)
+    JMP2 = 4  # above this  backward:jump  (if no filler)
+    JMP3 = 100000000  # above this  backward:jump  (if omitting last filler)
 
-    print_full(i)
+    # 3. "full-free jump and stay" = 4,4,inf -> this is in the paper!
+    # 4. "refined jump and stay" = 4,9,100
 
-    # preliminary filter conditions -- THINK ABOUT IT!
-    #  -- only if has out-edge
-    #  -- only if fq >= 3
-    #  -- only if l <= 8
-    if i not in cl_edges_fwrd:
-        print(' No out-edge, skip.')
-    elif cl_vertices_f[i] < 3:
-        print(' Too rare (<3), skip.')
-    elif cl_vertices_l[i] > 8:
-        print(' Too long (>8), skip.')
-    else:
-        print(' Processing.')
-        d = cl_edges_fwrd[i]  # forward edges -- is this line redundant? XXX
+    SUBJECT_SLOT = sys.argv[1]  # XXX
 
-        # how does it work
-        #
-        #  * is there a stay?
-        #    -> perform the step defined by the smallest-ratio stay
-        #
-        #  * if no stay, is there a jump?
-        #    -> perform the step defined by the largest-ratio jump
-        #       iff there is a filler and there is a filler after the jump as well (JMP1)
-        #           or there is no filler at all in the current vertex (JMP2)
-        #
-        #  * do it again if a step was made
-        #
-        # so it performs necessary amount of jumps and stays mixed
+    # corpus lattice
+    cl_vertices_f = {}  # freq of vertices
+    cl_vertices_l = {}  # length of VCCs at vertices
+    cl_edges_back = {}  # backward edges (= "in"-edges) down in cl
+    cl_edges_fwrd = {}  # forward edges (= "out"-edges) up in cl
 
-        act = i
+    for line in sys.stdin:
+        try:
+            d = json.loads(line)
+        except ValueError as err:
+            print(f"ValueError: {err}{{{line}}}", file=sys.stderr)
+            exit(1)
 
-        path = []  # = log of jumps and stays
+        fq = d.pop('fq', None)
 
-        while True:
-            stay_found = True
-            jump_found = True
+        # Adding subjects -- hack, because Hungarian is pro-drop
+        # = if there is no SUBJECT_SLOT => add SUBJECT_SLOT:None
+        if SUBJECT_SLOT not in d:
+            d[SUBJECT_SLOT] = None
 
-            # is there a stay?
-            max_out = None
-            d = cl_edges_fwrd.get(act, {})  # forward vertices
-            # there are always one except at a ss
+        # Data for the given sentence skeleton (ss):
+        dvfq = {}  # vertex-data: freqs
+        dvl = {}  # vertex-data: lengths
+        de = {}  # edge-data
+        deb = {}  # edge-data -- backwards!
 
-            if d:
-                max_out = max(d.keys(), key=lambda x: (cl_vertices_f[x], x))
+        dj = json.dumps(dict(sorted(d.items())), ensure_ascii=False)  # vcc: dict format -> string format (= key!)
+        # XXX maybe: dj = line -- there would be no need for converting forth and back
 
-            # Whether 'max_out' stays compared to 'act' (there must be an act..max_out edge!)
-            # fq-ratio on act..max_out edge (there must be an act..max_out edge!)
-            if max_out and cl_vertices_f[act] / cl_vertices_f[max_out] < STAY:
-                print(' A stay found, we follow.')
-                path.append('v')
-                # Current vertex
-                print(max_out, cl_vertices_f[max_out], cl_vertices_l[max_out], sep='\t')
-                act = max_out
+        # put in the ss
+        # XXX ugly: code repetition from build_dc_recursively()
+        length = len(d.keys()) + len(list(filter(lambda x: x is not None, d.values())))
+        dvfq[dj] = fq
+        dvl[dj] = length  # = cnt of slots + cnt of fillers
 
+        build_dc_recursively(d, fq, dvfq, dvl, de, deb)
+        # algo: edges and vertices for each ss
+        # plus: put together afterwards below -- THAT IS OK!
+
+        # transfer vertices of the given ss into main 'cl_vertices_f': freqs
+        for k in dvfq:
+            if k not in cl_vertices_f:
+                cl_vertices_f[k] = dvfq[k]
             else:
-                # fq-ratio on act..max_out edge (there must be an act..max_out edge!)
-                # TODO bug in the oroginal program ratio() returns only one value
-                r1, r2 = (cl_vertices_f[act] / cl_vertices_f[max_out], 0) if max_out else float('inf'), STAY
-                print(f' No stay (ratio={r1:2.2f} > {r2}), we stop.')
-                stay_found = False
+                cl_vertices_f[k] += dvfq[k]
+        # transfer vertices of the given ss into main 'cl_vertices_l': vcc lengths
+        for k in dvl:
+            if k not in cl_vertices_l:
+                cl_vertices_l[k] = dvl[k]
+        # transfer edges of the given ss into main 'cl_edges_back'
+        for i in de:
+            for j in de[i]:
+                if i not in cl_edges_back:
+                    cl_edges_back[i] = {}
+                cl_edges_back[i][j] = 1
+        # transfer edges of the given ss into main 'cl_edges_fwrd'
+        for i in deb:
+            for j in deb[i]:
+                if i not in cl_edges_fwrd:
+                    cl_edges_fwrd[i] = {}
+                cl_edges_fwrd[i][j] = 1
 
-                # if no stay, is there a(n appropriate) jump?
-                max_inn = None
-                d = cl_edges_back.get(act, {})  # backward vertices
-                # there are always one except at root
+    # take all vertices and filter out which is not needed
+    # point: not to miss any which is needed! :)
+
+    # process in a king of "good" order:
+    # according to length, then reverse fq (by '-' trick), then alphabetical order
+    for n, i in enumerate(sorted(cl_vertices_f, key=lambda x: (cl_vertices_l[x], -cl_vertices_f[x], x)), start=1):
+
+        print(f'#{n}')
+
+        print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, STAY, JMP1)
+
+        # preliminary filter conditions -- THINK ABOUT IT!
+        #  -- only if has out-edge
+        #  -- only if fq >= 3
+        #  -- only if l <= 8
+        if i not in cl_edges_fwrd:
+            print(' No out-edge, skip.')
+        elif cl_vertices_f[i] < 3:
+            print(' Too rare (<3), skip.')
+        elif cl_vertices_l[i] > 8:
+            print(' Too long (>8), skip.')
+        else:
+            print(' Processing.')
+            d = cl_edges_fwrd[i]  # forward edges -- is this line redundant? XXX
+
+            # how does it work
+            #
+            #  * is there a stay?
+            #    -> perform the step defined by the smallest-ratio stay
+            #
+            #  * if no stay, is there a jump?
+            #    -> perform the step defined by the largest-ratio jump
+            #       iff there is a filler and there is a filler after the jump as well (JMP1)
+            #           or there is no filler at all in the current vertex (JMP2)
+            #
+            #  * do it again if a step was made
+            #
+            # so it performs necessary amount of jumps and stays mixed
+
+            act = i
+
+            path = []  # = log of jumps and stays
+
+            while True:
+                stay_found = True
+                jump_found = True
+
+                # is there a stay?
+                max_out = None
+                d = cl_edges_fwrd.get(act, {})  # forward vertices
+                # there are always one except at a ss
 
                 if d:
-                    max_inn = max(d.keys(), key=lambda x: (cl_vertices_f[x], x))
+                    max_out = max(d.keys(), key=lambda x: (cl_vertices_f[x], x))
 
-                if max_inn:  # this exists except at root :)
-                    # fq-ratio on max_inn..act edge (there must be an max_inn..act edge!)
-                    r = cl_vertices_f[max_inn] / cl_vertices_f[act]
-                    jump = None
-                    info_msg = None
-                    jump_type = None
-
-                    # Whether there is a filler in max_inn or act
-                    # Meed to look at values, whether there is a not-None
-                    # There is a not-False (None is False)
-                    has_filler_max_inn = any(json.loads(max_inn).values())
-                    has_filler_act = any(json.loads(act).values())
-                    # 3 different cases which covers all possibilities
-                    # xor: there is a filler and there is a filler after the jump as well
-                    if has_filler_max_inn:
-                        jump = JMP1
-                        info_msg = 'keeping a filler'
-                        jump_type = 't(k)'
-                    # xor: there is no filler at all in the current vertex
-                    elif not has_filler_act:
-                        jump = JMP2
-                        info_msg = 'no filler'
-                        jump_type = 't(n)'
-                    # xor: there is one filler and the jump omits it
-                    elif has_filler_act and not has_filler_max_inn:
-                        jump = JMP3
-                        info_msg = 'omitting last filler'
-                        jump_type = 't(o)'
-                    else:
-                        print(' impossible outcome')
-                        exit(1)
-
-                    # Check whether the jump is OK
-                    # Is jump? Whether 'max_inn' jumps compared to 'act' (there must be a max_inn..act edge!)
-                    # fq-ratio on max_inn..act edge (there must be an max_inn..act edge!)
-                    if cl_vertices_f[max_inn] / cl_vertices_f[act] > jump:
-                        print(f' An appropriate jump ({info_msg}, {jump}<) found, we follow.')
-                        path.append(jump_type)
-                        # Current vertex
-                        print(max_inn, cl_vertices_f[max_inn], cl_vertices_l[max_inn], sep='\t')
-                        act = max_inn
-                    else:
-                        print(f' No appropriate jump ({info_msg}, {r:2.2f} < {jump}), we stop.')
-                        jump_found = False
+                # Whether 'max_out' stays compared to 'act' (there must be an act..max_out edge!)
+                # fq-ratio on act..max_out edge (there must be an act..max_out edge!)
+                if max_out and cl_vertices_f[act] / cl_vertices_f[max_out] < STAY:
+                    print(' A stay found, we follow.')
+                    path.append('v')
+                    # Current vertex
+                    print(max_out, cl_vertices_f[max_out], cl_vertices_l[max_out], sep='\t')
+                    act = max_out
 
                 else:
-                    print(' No backward edge -- no jump, we stop.')
-                    jump_found = False
+                    # fq-ratio on act..max_out edge (there must be an act..max_out edge!)
+                    # TODO bug in the oroginal program ratio() returns only one value
+                    r1, r2 = (cl_vertices_f[act] / cl_vertices_f[max_out], 0) if max_out else float('inf'), STAY
+                    print(f' No stay (ratio={r1:2.2f} > {r2}), we stop.')
+                    stay_found = False
 
-            # quit the loop when no step was made
-            if not stay_found and not jump_found: break
+                    # if no stay, is there a(n appropriate) jump?
+                    max_inn = None
+                    d = cl_edges_back.get(act, {})  # backward vertices
+                    # there are always one except at root
 
-        # what to do when we are at an ss
-        # current implementation: no ss can be a pVCC -- THINK ABOUT IT!
-        # because there are pVCCS like 'shine sun'
-        # whether 'act' is a ss
-        # XXX is this condition OK? "it has no forward edge" -- THINK ABOUT IT!
-        if act not in cl_edges_fwrd:
-            print(' Concrete sentence skeleton.')
-        else:
-            #pathstr = '0' if not path else ''.join( path )
-            #print(act,cl_vertices_f[act], cl_vertices_l[act], f'[{pathstr}]', pVCC, sep='\t')
-            print(act, cl_vertices_f[act], cl_vertices_l[act], 'pVCC', sep='\t')
-    print()
+                    if d:
+                        max_inn = max(d.keys(), key=lambda x: (cl_vertices_f[x], x))
+
+                    if max_inn:  # this exists except at root :)
+                        # fq-ratio on max_inn..act edge (there must be an max_inn..act edge!)
+                        r = cl_vertices_f[max_inn] / cl_vertices_f[act]
+                        jump = None
+                        info_msg = None
+                        jump_type = None
+
+                        # Whether there is a filler in max_inn or act
+                        # Meed to look at values, whether there is a not-None
+                        # There is a not-False (None is False)
+                        has_filler_max_inn = any(json.loads(max_inn).values())
+                        has_filler_act = any(json.loads(act).values())
+                        # 3 different cases which covers all possibilities
+                        # xor: there is a filler and there is a filler after the jump as well
+                        if has_filler_max_inn:
+                            jump = JMP1
+                            info_msg = 'keeping a filler'
+                            jump_type = 't(k)'
+                        # xor: there is no filler at all in the current vertex
+                        elif not has_filler_act:
+                            jump = JMP2
+                            info_msg = 'no filler'
+                            jump_type = 't(n)'
+                        # xor: there is one filler and the jump omits it
+                        elif has_filler_act and not has_filler_max_inn:
+                            jump = JMP3
+                            info_msg = 'omitting last filler'
+                            jump_type = 't(o)'
+                        else:
+                            print(' impossible outcome')
+                            exit(1)
+
+                        # Check whether the jump is OK
+                        # Is jump? Whether 'max_inn' jumps compared to 'act' (there must be a max_inn..act edge!)
+                        # fq-ratio on max_inn..act edge (there must be an max_inn..act edge!)
+                        if cl_vertices_f[max_inn] / cl_vertices_f[act] > jump:
+                            print(f' An appropriate jump ({info_msg}, {jump}<) found, we follow.')
+                            path.append(jump_type)
+                            # Current vertex
+                            print(max_inn, cl_vertices_f[max_inn], cl_vertices_l[max_inn], sep='\t')
+                            act = max_inn
+                        else:
+                            print(f' No appropriate jump ({info_msg}, {r:2.2f} < {jump}), we stop.')
+                            jump_found = False
+
+                    else:
+                        print(' No backward edge -- no jump, we stop.')
+                        jump_found = False
+
+                # quit the loop when no step was made
+                if not stay_found and not jump_found: break
+
+            # what to do when we are at an ss
+            # current implementation: no ss can be a pVCC -- THINK ABOUT IT!
+            # because there are pVCCS like 'shine sun'
+            # whether 'act' is a ss
+            # XXX is this condition OK? "it has no forward edge" -- THINK ABOUT IT!
+            if act not in cl_edges_fwrd:
+                print(' Concrete sentence skeleton.')
+            else:
+                #pathstr = '0' if not path else ''.join( path )
+                #print(act,cl_vertices_f[act], cl_vertices_l[act], f'[{pathstr}]', pVCC, sep='\t')
+                print(act, cl_vertices_f[act], cl_vertices_l[act], 'pVCC', sep='\t')
+        print()
+
+
+if __name__ == '__main__':
+    main()
