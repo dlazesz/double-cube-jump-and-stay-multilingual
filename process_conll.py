@@ -13,6 +13,7 @@ import argparse
 import fileinput
 from logging import Logger
 from collections import defaultdict
+from typing import Any
 
 # CoNLL fields -- last two added by this module
 (ID, FORM, LEMMA, UPOS, XPOS, FEATS, HEAD, DEPREL, DEPS, MISC,
@@ -180,7 +181,7 @@ def print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, l
 
     if output_format == 'JSON':
         # Dummy freq for later
-        out = {'fq': 0, 'stem': verb_lemma}
+        out = {'freq': 0, 'stem': verb_lemma}
         # TODO this line kills double keys!
         # Space, literal qoute (\") and at sign (@) in value is handled incorrectly in the original code
         # TODO originally stem not in JSON (JSON is generated as a separate step)
@@ -215,7 +216,7 @@ def build_index_for_sentence(sentence, logger):
 
 
 def process_sentence(sentence, inputlang, include_unknown_slots, output_format, logfile, logger: Logger):
-    children, by_id, roots = build_index_for_sentence(sentence, logger)
+    children, by_id, roots = build_index_for_sentence(sentence, logger)  # TODO this make things slower, revert it!
 
     xcomp_particle = XCOMP_PARTICLE.get(inputlang)
     for root in roots:
@@ -307,7 +308,7 @@ def main():
     with fileinput.input(args.input_file, encoding='UTF-8') as fd:
         sentence = []
         for row in fd:
-            row = row.strip()
+            row: Any = row.strip()
             if row.startswith('# '):  # Comment line (starts with hashmark and space)
                 continue
             if len(row) > 0:  # Line is not empty => process this token

@@ -150,10 +150,12 @@ def main():
             print(f"ValueError: {err}{{{line}}}", file=sys.stderr)
             exit(1)
 
-        freq = d.pop('fq', None)  # TODO change key in the other steps to freq
+        freq = d.pop('freq', None)
+        d.pop('stem', None)
 
         # Adding subjects -- hack, because Hungarian is pro-drop
         # = if there is no subject_slot => add subject_slot:None
+        # if 'nsubj' not in d or 'Nom' not in d: TODO which?
         if subject_slot not in d:  # TODO move to CoNLL processing
             d[subject_slot] = None
 
