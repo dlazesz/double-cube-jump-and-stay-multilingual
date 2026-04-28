@@ -1,10 +1,55 @@
 import sys
 import json
+import argparse
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Configure jump/stay thresholds and subject slot.")
+
+    # 3. "full-free jump and stay" = 4,4,inf -> this is in the paper!
+    # 4. "refined jump and stay" = 4,9,100
+
+    parser.add_argument(
+        "--stay",
+        type=float,
+        default=1.7,
+        help="Below this value: forward=stay (default: 1.7)"
+    )
+
+    parser.add_argument(
+        "--jump1",
+        type=float,
+        default=4,
+        help="Above this value: backward=jump (if keeping a filler) (default: 4)"
+    )
+
+    parser.add_argument(
+        "--jump2",
+        type=float,
+        default=4,
+        help="Above this value: backward=jump (if no filler) (default: 4)"
+    )
+
+    parser.add_argument(
+        "--jump3",
+        type=float,
+        default=1e8,
+        help="Above this value: backward=jump (if omitting last filler) (default: 1e8)"
+    )
+
+    parser.add_argument(
+        "--subject_slot",
+        type=str,
+        required=True,
+        help="Subject slot"
+    )
+
+    return parser.parse_args()
 
 
 # from a vcc ('d') calculates vccs "shorter by 1" element ('e') recursively,
 # and record the resulting edges and vertices
-def build_dc_recursively(d, fq, vertices_f, vertices_l, edges_back, edges_fwrd):
+def build_dc_recursively(d: dict[str, str | None], fq, vertices_f, vertices_l, edges_back, edges_fwrd):
     slots = sorted(d.keys())
     dj = json.dumps(dict(sorted(d.items())), ensure_ascii=False)  # vcc: dict format -> string format (= key!)
 
@@ -45,7 +90,7 @@ def build_dc_recursively(d, fq, vertices_f, vertices_l, edges_back, edges_fwrd):
                 build_dc_recursively(e, fq, vertices_f, vertices_l, edges_back, edges_fwrd)
 
 
-def print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, STAY, JMP1):
+def print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, stay, jump1):
     fq = cl_vertices_f[i]
 
     # forward edges -- for "stay"
@@ -55,9 +100,9 @@ def print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, ST
         for j in sorted(d.keys(), key=lambda x: (cl_vertices_f[x], x)):
             ratio = fq / cl_vertices_f[j]
             cl = '??'
-            if ratio < STAY:
+            if ratio < stay:
                 cl = '= !stay'
-            if ratio > JMP1:
+            if ratio > jump1:
                 cl = '^'
             print(f'->  {cl_vertices_f[j]}  {ratio:2.2f}  {j}  {cl}')
     print('x')
@@ -69,9 +114,9 @@ def print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, ST
         for j in sorted(d.keys(), key=lambda x: (cl_vertices_f[x], x)):
             ratio = cl_vertices_f[j] / fq
             cl = '??'
-            if ratio < STAY:
+            if ratio < stay:
                 cl = '='
-            if ratio > JMP1:
+            if ratio > jump1:
                 cl = '^ !jump'
             print(f'<-  {cl_vertices_f[j]}  {ratio:2.2f}  {j}  {cl}')
     print('x')
@@ -83,19 +128,16 @@ def print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, ST
 
 
 def main():
+    args = parse_args()
+    stay = args.stay
+    jump1 = args.jump1
+    jump2 = args.jump2
+    jump3 = args.jump3
+    subject_slot = args.subject_slot
+
     # -- Build the corpus lattice
 
     # idea #3: "jump and stay from root vertex"
-
-    STAY = 1.7  # below this  forward:stay
-    JMP1 = 4  # above this  backward:jump  (if keeping a filler)
-    JMP2 = 4  # above this  backward:jump  (if no filler)
-    JMP3 = 100000000  # above this  backward:jump  (if omitting last filler)
-
-    # 3. "full-free jump and stay" = 4,4,inf -> this is in the paper!
-    # 4. "refined jump and stay" = 4,9,100
-
-    SUBJECT_SLOT = sys.argv[1]  # XXX
 
     # corpus lattice
     cl_vertices_f = {}  # freq of vertices
@@ -105,7 +147,7 @@ def main():
 
     for line in sys.stdin:
         try:
-            d = json.loads(line)
+            d: dict[str, str | None] = json.loads(line)
         except ValueError as err:
             print(f"ValueError: {err}{{{line}}}", file=sys.stderr)
             exit(1)
@@ -113,9 +155,9 @@ def main():
         fq = d.pop('fq', None)
 
         # Adding subjects -- hack, because Hungarian is pro-drop
-        # = if there is no SUBJECT_SLOT => add SUBJECT_SLOT:None
-        if SUBJECT_SLOT not in d:
-            d[SUBJECT_SLOT] = None
+        # = if there is no subject_slot => add subject_slot:None
+        if subject_slot not in d:
+            d[subject_slot] = None
 
         # Data for the given sentence skeleton (ss):
         dvfq = {}  # vertex-data: freqs
@@ -168,7 +210,7 @@ def main():
 
         print(f'#{n}')
 
-        print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, STAY, JMP1)
+        print_full(i, cl_vertices_f, cl_vertices_l, cl_edges_back, cl_edges_fwrd, stay, jump1)
 
         # preliminary filter conditions -- THINK ABOUT IT!
         #  -- only if has out-edge
@@ -182,7 +224,6 @@ def main():
             print(' Too long (>8), skip.')
         else:
             print(' Processing.')
-            d = cl_edges_fwrd[i]  # forward edges -- is this line redundant? XXX
 
             # how does it work
             #
@@ -191,8 +232,8 @@ def main():
             #
             #  * if no stay, is there a jump?
             #    -> perform the step defined by the largest-ratio jump
-            #       iff there is a filler and there is a filler after the jump as well (JMP1)
-            #           or there is no filler at all in the current vertex (JMP2)
+            #       iff there is a filler and there is a filler after the jump as well (jump1)
+            #           or there is no filler at all in the current vertex (jump2)
             #
             #  * do it again if a step was made
             #
@@ -216,7 +257,7 @@ def main():
 
                 # Whether 'max_out' stays compared to 'act' (there must be an act..max_out edge!)
                 # fq-ratio on act..max_out edge (there must be an act..max_out edge!)
-                if max_out and cl_vertices_f[act] / cl_vertices_f[max_out] < STAY:
+                if max_out and cl_vertices_f[act] / cl_vertices_f[max_out] < stay:
                     print(' A stay found, we follow.')
                     path.append('v')
                     # Current vertex
@@ -226,7 +267,7 @@ def main():
                 else:
                     # fq-ratio on act..max_out edge (there must be an act..max_out edge!)
                     # TODO bug in the oroginal program ratio() returns only one value
-                    r1, r2 = (cl_vertices_f[act] / cl_vertices_f[max_out], 0) if max_out else float('inf'), STAY
+                    r1, r2 = (cl_vertices_f[act] / cl_vertices_f[max_out], 0) if max_out else float('inf'), stay
                     print(f' No stay (ratio={r1:2.2f} > {r2}), we stop.')
                     stay_found = False
 
@@ -253,17 +294,17 @@ def main():
                         # 3 different cases which covers all possibilities
                         # xor: there is a filler and there is a filler after the jump as well
                         if has_filler_max_inn:
-                            jump = JMP1
+                            jump = jump1
                             info_msg = 'keeping a filler'
                             jump_type = 't(k)'
                         # xor: there is no filler at all in the current vertex
                         elif not has_filler_act:
-                            jump = JMP2
+                            jump = jump2
                             info_msg = 'no filler'
                             jump_type = 't(n)'
                         # xor: there is one filler and the jump omits it
                         elif has_filler_act and not has_filler_max_inn:
-                            jump = JMP3
+                            jump = jump3
                             info_msg = 'omitting last filler'
                             jump_type = 't(o)'
                         else:
