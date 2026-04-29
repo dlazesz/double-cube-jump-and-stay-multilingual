@@ -32,8 +32,8 @@ def parse_args():
 
     parser.add_argument(
         "--jump3",
-        type=float,
-        default=1e8,
+        type=int,
+        default=100_000_000,
         help="Above this value: backward=jump (if omitting last filler) (default: 1e8)"
     )
 
@@ -259,7 +259,7 @@ def main():
                     max_out = max(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x))
 
                 # Whether 'max_out' stays compared to 'act' (there must be an act..max_out edge!)
-                # freq-ratio on act..max_out edge (there must be an act..max_out edge!)
+                # Freq-ratio on act..max_out edge (there must be an act..max_out edge!)
                 if max_out and corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out] < stay:
                     print(' A stay found, we follow.')
                     path.append('v')
@@ -269,10 +269,9 @@ def main():
                     act = max_out
 
                 else:
-                    # freq-ratio on act..max_out edge (there must be an act..max_out edge!)
-                    # TODO bug in the oroginal program ratio() returns only one value
-                    r1, r2 = ((corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out], 0)
-                              if max_out else float('inf'), stay)
+                    # Freq-ratio on act..max_out edge (there must be an act..max_out edge!)
+                    r1, r2 = (corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out]
+                              if max_out else 0, stay)  # TODO here 0 do not satisfy the gt relation should be inf?
                     print(f' No stay (ratio={r1:2.2f} > {r2}), we stop.')
                     stay_found = False
 
