@@ -91,39 +91,35 @@ def print_full(i, corpus_lattice_vertices_freq, corpus_lattice_vertices_len, cor
     freq = corpus_lattice_vertices_freq[i]
 
     # Forward edges -- for "stay"
-    if i in corpus_lattice_edges_forward:
-        d = corpus_lattice_edges_forward[i]
-        # sort: according to freq value, then vcc string-format key
-        for j in sorted(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x)):
-            j_freq = corpus_lattice_vertices_freq[j]
-            ratio = freq / j_freq
-            if ratio < stay:
-                corpus_lattice = '= !stay'
-            elif ratio > jump1:
-                corpus_lattice = '^'
-            else:
-                corpus_lattice = '??'
-            print(f'->  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
+    # sort: according to freq value, then vcc string-format key
+    for j in sorted(corpus_lattice_edges_forward.get(i, {}), key=lambda x: (corpus_lattice_vertices_freq[x], x)):
+        j_freq = corpus_lattice_vertices_freq[j]
+        ratio = freq / j_freq
+        if ratio < stay:
+            corpus_lattice = '= !stay'
+        elif ratio > jump1:
+            corpus_lattice = '^'
+        else:
+            corpus_lattice = '??'
+        print(f'->  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
     print('x')
 
     # Backward edges -- for "jump"
-    if i in corpus_lattice_edges_backward:
-        d = corpus_lattice_edges_backward[i]
-        # Sort: according to freq value, then vcc string-format key
-        for j in sorted(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x)):
-            j_freq = corpus_lattice_vertices_freq[j]
-            ratio = j_freq / freq
-            if ratio < stay:
-                corpus_lattice = '='
-            elif ratio > jump1:
-                corpus_lattice = '^ !jump'
-            else:
-                corpus_lattice = '??'
-            print(f'<-  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
+    # Sort: according to freq value, then vcc string-format key
+    for j in sorted(corpus_lattice_edges_backward.get(i, {}), key=lambda x: (corpus_lattice_vertices_freq[x], x)):
+        j_freq = corpus_lattice_vertices_freq[j]
+        ratio = j_freq / freq
+        if ratio < stay:
+            corpus_lattice = '='
+        elif ratio > jump1:
+            corpus_lattice = '^ !jump'
+        else:
+            corpus_lattice = '??'
+        print(f'<-  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
     print('x')
 
     # Current vertex
-    print(i, corpus_lattice_vertices_freq[i], corpus_lattice_vertices_len[i], sep='\t')
+    print(i, freq, corpus_lattice_vertices_len[i], sep='\t')
 
 
 def main():
