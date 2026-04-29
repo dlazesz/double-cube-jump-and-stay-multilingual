@@ -1,6 +1,7 @@
 import sys
 import json
 import argparse
+from collections import defaultdict
 
 
 def parse_args():
@@ -71,12 +72,8 @@ def build_dc_recursively(d: dict[str, str | None], freq, vertices_freq, vertices
         #    data structure: 2x dict = dict according to startpoints
         #                    endpoints in dict (value = '1' if exists)
         #    XXX maybe: should be better with a set -- but OK for now :)
-        if d_json not in edges_backward:
-            edges_backward[d_json] = {}
-        edges_backward[d_json][e_json] = 1
-        if e_json not in edges_forward:
-            edges_forward[e_json] = {}
-        edges_forward[e_json][d_json] = 1
+        edges_backward.setdefault(d_json, {})[e_json] = 1
+        edges_forward.setdefault(e_json, {})[d_json] = 1
 
         # -- Enumerating vertices = vertices are needed only if not processed yet
         if e_json not in vertices_freq:  # every vertex counted only once
@@ -84,7 +81,7 @@ def build_dc_recursively(d: dict[str, str | None], freq, vertices_freq, vertices
             #    a given vertex only once!
             # -- this implements the metric on the poster
             vertices_freq[e_json] = freq
-            vertices_len[e_json] = len(e.keys()) + len(list(filter(lambda x: x is not None, e.values())))
+            vertices_len[e_json] = sum(1 if v is None else 2 for v in e.values())
             if len(e) > 0:
                 build_dc_recursively(e, freq, vertices_freq, vertices_len, edges_backward, edges_forward)
 
@@ -98,13 +95,15 @@ def print_full(i, corpus_lattice_vertices_freq, corpus_lattice_vertices_len, cor
         d = corpus_lattice_edges_forward[i]
         # sort: according to freq value, then vcc string-format key
         for j in sorted(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x)):
-            ratio = freq / corpus_lattice_vertices_freq[j]
-            corpus_lattice = '??'
+            j_freq = corpus_lattice_vertices_freq[j]
+            ratio = freq / j_freq
             if ratio < stay:
                 corpus_lattice = '= !stay'
-            if ratio > jump1:
+            elif ratio > jump1:
                 corpus_lattice = '^'
-            print(f'->  {corpus_lattice_vertices_freq[j]}  {ratio:2.2f}  {j}  {corpus_lattice}')
+            else:
+                corpus_lattice = '??'
+            print(f'->  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
     print('x')
 
     # Backward edges -- for "jump"
@@ -112,13 +111,15 @@ def print_full(i, corpus_lattice_vertices_freq, corpus_lattice_vertices_len, cor
         d = corpus_lattice_edges_backward[i]
         # Sort: according to freq value, then vcc string-format key
         for j in sorted(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x)):
-            ratio = corpus_lattice_vertices_freq[j] / freq
-            corpus_lattice = '??'
+            j_freq = corpus_lattice_vertices_freq[j]
+            ratio = j_freq / freq
             if ratio < stay:
                 corpus_lattice = '='
-            if ratio > jump1:
+            elif ratio > jump1:
                 corpus_lattice = '^ !jump'
-            print(f'<-  {corpus_lattice_vertices_freq[j]}  {ratio:2.2f}  {j}  {corpus_lattice}')
+            else:
+                corpus_lattice = '??'
+            print(f'<-  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
     print('x')
 
     # Current vertex
@@ -138,7 +139,7 @@ def main():
     # Idea #3: "jump and stay from root vertex"
 
     # Corpus lattice
-    corpus_lattice_vertices_freq = {}  # freq of vertices
+    corpus_lattice_vertices_freq = defaultdict(int)  # freq of vertices
     corpus_lattice_vertices_len = {}  # length of VCCs at vertices
     corpus_lattice_edges_backward = {}  # backward edges (= "in"-edges) down in corpus lattice
     corpus_lattice_edges_forward = {}  # forward edges (= "out"-edges) up in corpus lattice
@@ -170,7 +171,7 @@ def main():
 
         # Put in the sentence skeleton
         # XXX ugly: code repetition from build_dc_recursively()
-        length = len(d.keys()) + len(list(filter(lambda x: x is not None, d.values())))
+        length = len(d.keys()) + sum(x is not None for x in d.values())
         vertex_data_freq[d_json] = freq
         vertex_data_len[d_json] = length  # = count of slots + count of fillers
 
@@ -180,10 +181,7 @@ def main():
 
         # Transfer vertices of the given sentence skeleton into main 'corpus_lattice_vertices_freq': freqs
         for k in vertex_data_freq:
-            if k not in corpus_lattice_vertices_freq:
-                corpus_lattice_vertices_freq[k] = vertex_data_freq[k]
-            else:
-                corpus_lattice_vertices_freq[k] += vertex_data_freq[k]
+            corpus_lattice_vertices_freq[k] += vertex_data_freq[k]
         # Transfer vertices of the given sentence skeleton into main 'corpus_lattice_vertices_len': vcc lengths
         for k in vertex_data_len:
             if k not in corpus_lattice_vertices_len:
@@ -191,15 +189,11 @@ def main():
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_backward'
         for i in edge_data:
             for j in edge_data[i]:
-                if i not in corpus_lattice_edges_backward:
-                    corpus_lattice_edges_backward[i] = {}
-                corpus_lattice_edges_backward[i][j] = 1
+                corpus_lattice_edges_backward.setdefault(i, {})[j] = 1
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_forward'
         for i in edge_data_backwards:
             for j in edge_data_backwards[i]:
-                if i not in corpus_lattice_edges_forward:
-                    corpus_lattice_edges_forward[i] = {}
-                corpus_lattice_edges_forward[i][j] = 1
+                corpus_lattice_edges_forward.setdefault(i, {})[j] = 1
 
     # Take all vertices and filter out which is not needed
     # point: not to miss any which is needed! :)
@@ -251,12 +245,9 @@ def main():
                 jump_found = True
 
                 # Is there a stay?
-                max_out = None
-                d = corpus_lattice_edges_forward.get(act, {})  # Forward vertices
                 # There are always one except at a sentence skeleton
-
-                if d:
-                    max_out = max(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x))
+                d = corpus_lattice_edges_forward.get(act, {})  # Forward vertices
+                max_out = max(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x), default=None)
 
                 # Whether 'max_out' stays compared to 'act' (there must be an act..max_out edge!)
                 # Freq-ratio on act..max_out edge (there must be an act..max_out edge!)
@@ -270,25 +261,23 @@ def main():
 
                 else:
                     # Freq-ratio on act..max_out edge (there must be an act..max_out edge!)
-                    r1, r2 = (corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out]
-                              if max_out else 0, stay)  # TODO here 0 do not satisfy the gt relation should be inf?
-                    print(f' No stay (ratio={r1:2.2f} > {r2}), we stop.')
+
+                    if max_out:
+                        r1 = corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out]
+                    else:
+                        r1 = 0  # TODO here 0 do not satisfy the gt relation should be inf?
+
+                    print(f' No stay (ratio={r1:2.2f} > {stay}), we stop.')
                     stay_found = False
 
                     # If no stay, is there a(n appropriate) jump?
-                    max_inn = None
-                    d = corpus_lattice_edges_backward.get(act, {})  # Backward vertices
                     # There are always one except at root
-
-                    if d:
-                        max_inn = max(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x))
+                    d = corpus_lattice_edges_backward.get(act, {})  # Backward vertices
+                    max_inn = max(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x), default=None)
 
                     if max_inn:  # This exists except at root :)
                         # Freq-ratio on max_inn..act edge (there must be an max_inn..act edge!)
                         r = corpus_lattice_vertices_freq[max_inn] / corpus_lattice_vertices_freq[act]
-                        jump = None
-                        info_msg = None
-                        jump_type = None
 
                         # Whether there is a filler in max_inn or act
                         # Meed to look at values, whether there is a not-None
@@ -334,7 +323,8 @@ def main():
                         jump_found = False
 
                 # Quit the loop when no step was made
-                if not stay_found and not jump_found: break
+                if not stay_found and not jump_found:
+                    break
 
             # What to do when we are at an sentence skeleton
             # Current implementation: no sentence skeleton can be a pVCC -- THINK ABOUT IT!
