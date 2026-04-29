@@ -48,13 +48,13 @@ def parse_args():
     return parser.parse_args()
 
 
-# From a vcc ('d') calculates vccs "shorter by 1" element ('e') recursively, and record the resulting edges and vertices
 def build_dc_recursively(d: dict[str, str | None], freq, vertices_freq, vertices_len, edges_backward, edges_forward):
-    slots = sorted(d.keys())
+    """From a vcc ('d') calculates vccs "shorter by 1" element ('e') recursively,
+       and record the resulting edges and vertices"""
     d_json = json.dumps(dict(sorted(d.items())), ensure_ascii=False)  # vcc: dict format -> string format (= key!)
 
     # "shorter by 1" elements = every slot is to be shortened by 1 respectively
-    for slot in slots:
+    for slot in sorted(d.keys()):
         e = d.copy()
         if e[slot] is None:  # If no filler -> omit the slot
             del e[slot]
@@ -167,9 +167,8 @@ def main():
 
         # Put in the sentence skeleton
         # XXX ugly: code repetition from build_dc_recursively()
-        length = len(d.keys()) + sum(x is not None for x in d.values())
         vertex_data_freq[d_json] = freq
-        vertex_data_len[d_json] = length  # = count of slots + count of fillers
+        vertex_data_len[d_json] = sum(1 if v is None else 2 for v in d.values())  # = count of slots + count of fillers
 
         build_dc_recursively(d, freq, vertex_data_freq, vertex_data_len, edge_data, edge_data_backwards)
         # algo: edges and vertices for each sentence skeleton
@@ -179,9 +178,8 @@ def main():
         for k in vertex_data_freq:
             corpus_lattice_vertices_freq[k] += vertex_data_freq[k]
         # Transfer vertices of the given sentence skeleton into main 'corpus_lattice_vertices_len': vcc lengths
-        for k in vertex_data_len:
-            if k not in corpus_lattice_vertices_len:
-                corpus_lattice_vertices_len[k] = vertex_data_len[k]
+        for k, v in vertex_data_len.items():
+            corpus_lattice_vertices_len.setdefault(k, v)
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_backward'
         for i in edge_data:
             for j in edge_data[i]:
@@ -242,12 +240,14 @@ def main():
 
                 # Is there a stay?
                 # There are always one except at a sentence skeleton
-                d = corpus_lattice_edges_forward.get(act, {})  # Forward vertices
-                max_out = max(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x), default=None)
+                # Forward vertices
+                max_out: str | None = max(corpus_lattice_edges_forward.get(act, {}),
+                                          key=lambda x: (corpus_lattice_vertices_freq[x], x), default=None)
 
                 # Whether 'max_out' stays compared to 'act' (there must be an act..max_out edge!)
                 # Freq-ratio on act..max_out edge (there must be an act..max_out edge!)
-                if max_out and corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out] < stay:
+                if max_out is not None and \
+                        corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out] < stay:
                     print(' A stay found, we follow.')
                     path.append('v')
                     # Current vertex
@@ -257,8 +257,7 @@ def main():
 
                 else:
                     # Freq-ratio on act..max_out edge (there must be an act..max_out edge!)
-
-                    if max_out:
+                    if max_out is not None:
                         r1 = corpus_lattice_vertices_freq[act] / corpus_lattice_vertices_freq[max_out]
                     else:
                         r1 = 0  # TODO here 0 do not satisfy the gt relation should be inf?
@@ -268,10 +267,11 @@ def main():
 
                     # If no stay, is there a(n appropriate) jump?
                     # There are always one except at root
-                    d = corpus_lattice_edges_backward.get(act, {})  # Backward vertices
-                    max_inn = max(d.keys(), key=lambda x: (corpus_lattice_vertices_freq[x], x), default=None)
+                    # Backward vertices
+                    max_inn: str | None = max(corpus_lattice_edges_backward.get(act, {}),
+                                              key=lambda x: (corpus_lattice_vertices_freq[x], x), default=None)
 
-                    if max_inn:  # This exists except at root :)
+                    if max_inn is not None:  # This exists except at root :)
                         # Freq-ratio on max_inn..act edge (there must be an max_inn..act edge!)
                         r = corpus_lattice_vertices_freq[max_inn] / corpus_lattice_vertices_freq[act]
 
