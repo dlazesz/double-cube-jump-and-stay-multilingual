@@ -170,8 +170,7 @@ def main():
         vertex_freq[d_json] = freq
         vertex_len[d_json] = sum(1 if v is None else 2 for v in d.values())  # = count of slots + count of fillers
 
-        # TODO here edge_forward, edge_backward is swapped. Where is the second swap that makes this right?
-        build_dc_recursively(d, d_json, freq, vertex_freq, vertex_len, edge_forward, edge_backward)
+        build_dc_recursively(d, d_json, freq, vertex_freq, vertex_len, edge_backward, edge_forward)
         # algo: edges and vertices for each sentence skeleton
         # plus: put together afterwards below -- THAT IS OK!
 
@@ -182,12 +181,12 @@ def main():
         for k, v in vertex_len.items():
             corpus_lattice_vertices_len.setdefault(k, v)
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_backward'
-        for i in edge_forward:
-            for j in edge_forward[i]:
-                corpus_lattice_edges_backward.setdefault(i, {})[j] = 1
-        # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_forward'
         for i in edge_backward:
             for j in edge_backward[i]:
+                corpus_lattice_edges_backward.setdefault(i, {})[j] = 1
+        # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_forward'
+        for i in edge_forward:
+            for j in edge_forward[i]:
                 corpus_lattice_edges_forward.setdefault(i, {})[j] = 1
 
     # Take all vertices and filter out which is not needed
