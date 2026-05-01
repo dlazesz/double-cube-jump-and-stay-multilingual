@@ -87,7 +87,7 @@ def print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges
 
     # Backward edges -- for "jump"
     # Sort: according to freq value, then vcc string-format key
-    for j in sorted(cl_edges_backward.get(i, {}), key=lambda x: (cl_vertices_freq[x], x)):
+    for j in sorted(cl_edges_backward.get(i, set()), key=lambda x: (cl_vertices_freq[x], x)):
         j_freq = cl_vertices_freq[j]
         ratio = j_freq / freq
         if ratio < stay:
@@ -103,12 +103,14 @@ def print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges
     print(i, freq, cl_vertices_len[i], sep='\t')
 
 
-def build_dc_recursively(d, d_json, freq, vertices_freq, vertices_len, edges_backward, edges_forward):
+def build_dc_recursively(d, d_json, freq, vertices_freq, vertices_len, edges_backward, edges_forward, visited=None):
     """From a vcc ('d') calculates vccs "shorter by 1" element ('e') recursively,
        and record the resulting edges and vertices"""
+    if visited is None:
+        visited = set()  # Visited in this sentence (during the recursion)
 
     # "shorter by 1" elements = every slot is to be shortened by 1 respectively
-    for slot in d.keys():
+    for slot in d:
         e = d.copy()
         if e[slot] is None:  # If no filler -> omit the slot
             del e[slot]
@@ -123,63 +125,36 @@ def build_dc_recursively(d, d_json, freq, vertices_freq, vertices_len, edges_bac
         #        edge values should be read from vertices -- this is completely OK!
 
         # -- enumerating edges = all edges needed starting form the given vertex
-        #    data structure: 2x dict = dict according to startpoints
-        #                    endpoints in dict (value = '1' if exists)
-        #    XXX maybe: should be better with a set -- but OK for now :)
-        edges_backward.setdefault(d_json, {})[e_json] = 1
-        edges_forward.setdefault(e_json, {})[d_json] = 1
+        edges_backward[d_json].add(e_json)
+        edges_forward[e_json].add(d_json)
 
         # -- Enumerating vertices = vertices are needed only if not processed yet
-        if e_json not in vertices_freq:  # Every vertex counted only once
-            # => every build_dc_recursively() step gets to
-            #    a given vertex only once!
+        if e_json not in visited:  # Every vertex counted only once
+            # => every build_dc_recursively() step gets to a given vertex only once!
             # -- this implements the metric on the poster
-            vertices_freq[e_json] = freq
+            visited.add(e_json)
+            vertices_freq[e_json] += freq
             vertices_len[e_json] = sum(1 if v is None else 2 for v in e.values())  # = count of slots + count of fillers
-            if len(e) > 0:
-                build_dc_recursively(e, e_json, freq, vertices_freq, vertices_len, edges_backward, edges_forward)
+            build_dc_recursively(e, e_json, freq, vertices_freq, vertices_len, edges_backward, edges_forward, visited)
 
 
-def build_corpus_lattice(subject_slot) -> tuple[dict[str, int], dict[str, int], dict[str, dict], dict[str, dict]]:
+def build_corpus_lattice(subject_slot) -> tuple[dict[str, int], dict[str, int], dict[str, set], dict[str, set]]:
     # Corpus lattice
     cl_vertices_freq = Counter()  # Freq of vertices
     cl_vertices_len = {}  # Length of VCCs at vertices
-    cl_edges_backward = defaultdict(dict)  # Backward edges (= "in"-edges) down in corpus lattice
-    cl_edges_forward = defaultdict(dict)  # Forward edges (= "out"-edges) up in corpus lattice
+    cl_edges_backward = defaultdict(set)  # Backward edges (= "in"-edges) down in corpus lattice
+    cl_edges_forward = defaultdict(set)  # Forward edges (= "out"-edges) up in corpus lattice
 
     for line, freq in process_input(sys.stdin, subject_slot):
         d = dict(sorted(line.items()))
         d_json = json.dumps(d, ensure_ascii=False)  # vcc: dict format -> string format (= key!)
-        # XXX maybe: d_json = line -- there would be no need for converting forth and back
-
-        # Data for the given sentence skeleton:
-        vertex_freq = {}  # Vertex-data: freqs
-        vertex_len = {}  # Vertex-data: lengths
-        edge_forward = defaultdict(dict)  # Edge-data
-        edge_backward = defaultdict(dict)  # Edge-data -- backwards!
 
         # Put in the sentence skeleton
         # XXX ugly: code repetition from build_dc_recursively()
-        vertex_freq[d_json] = freq
-        vertex_len[d_json] = sum(1 if v is None else 2 for v in d.values())  # = count of slots + count of fillers
+        cl_vertices_freq[d_json] += freq
+        cl_vertices_len[d_json] = sum(1 if v is None else 2 for v in d.values())  # = count of slots + count of fillers
 
-        build_dc_recursively(d, d_json, freq, vertex_freq, vertex_len, edge_backward, edge_forward)
-        # algo: edges and vertices for each sentence skeleton
-        # plus: put together afterwards below -- THAT IS OK!
-
-        # Transfer vertices of the given sentence skeleton into main 'cl_vertices_freq': freqs
-        for k in vertex_freq:
-            cl_vertices_freq[k] += vertex_freq[k]
-        # Transfer vertices of the given sentence skeleton into main 'cl_vertices_len': vcc lengths
-        cl_vertices_len.update(vertex_len)
-        # Transfer edges of the given sentence skeleton into main 'cl_edges_backward'
-        for i in edge_backward:
-            for j in edge_backward[i]:
-                cl_edges_backward[i][j] = 1
-        # Transfer edges of the given sentence skeleton into main 'cl_edges_forward'
-        for i in edge_forward:
-            for j in edge_forward[i]:
-                cl_edges_forward[i][j] = 1
+        build_dc_recursively(d, d_json, freq, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward)
 
     return cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward
 
@@ -192,7 +167,6 @@ def main():
     jump3 = args.jump3
 
     # -- Build the corpus lattice
-    # Idea #3: "jump and stay from root vertex"
     cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward = build_corpus_lattice(args.subject_slot)
 
     # Take all vertices and filter out which is not needed
