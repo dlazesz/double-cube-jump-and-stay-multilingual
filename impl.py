@@ -48,19 +48,18 @@ def parse_args():
     return parser.parse_args()
 
 
-def build_dc_recursively(d: dict[str, str | None], freq, vertices_freq, vertices_len, edges_backward, edges_forward):
+def build_dc_recursively(d, d_json, freq, vertices_freq, vertices_len, edges_backward, edges_forward):
     """From a vcc ('d') calculates vccs "shorter by 1" element ('e') recursively,
        and record the resulting edges and vertices"""
-    d_json = json.dumps(dict(sorted(d.items())), ensure_ascii=False)  # vcc: dict format -> string format (= key!)
 
     # "shorter by 1" elements = every slot is to be shortened by 1 respectively
-    for slot in sorted(d.keys()):
+    for slot in d.keys():
         e = d.copy()
         if e[slot] is None:  # If no filler -> omit the slot
             del e[slot]
         else:  # If filler -> omit the filler
             e[slot] = None
-        e_json = json.dumps(dict(sorted(e.items())), ensure_ascii=False)  # vcc: dict format -> string format (= key!)
+        e_json = json.dumps(e, ensure_ascii=False)  # vcc: dict format -> string format (= key!)
 
         # Point: process every vertex exactly _once_,
         #        plus every edge from the given vertex -- OK!
@@ -76,14 +75,14 @@ def build_dc_recursively(d: dict[str, str | None], freq, vertices_freq, vertices
         edges_forward.setdefault(e_json, {})[d_json] = 1
 
         # -- Enumerating vertices = vertices are needed only if not processed yet
-        if e_json not in vertices_freq:  # every vertex counted only once
+        if e_json not in vertices_freq:  # Every vertex counted only once
             # => every build_dc_recursively() step gets to
             #    a given vertex only once!
             # -- this implements the metric on the poster
             vertices_freq[e_json] = freq
-            vertices_len[e_json] = sum(1 if v is None else 2 for v in e.values())
+            vertices_len[e_json] = sum(1 if v is None else 2 for v in e.values())  # = count of slots + count of fillers
             if len(e) > 0:
-                build_dc_recursively(e, freq, vertices_freq, vertices_len, edges_backward, edges_forward)
+                build_dc_recursively(e, e_json, freq, vertices_freq, vertices_len, edges_backward, edges_forward)
 
 
 def print_full(i, corpus_lattice_vertices_freq, corpus_lattice_vertices_len, corpus_lattice_edges_backward,
@@ -156,37 +155,39 @@ def main():
         if subject_slot not in d:  # TODO move to CoNLL processing
             d[subject_slot] = None
 
-        # Data for the given sentence skeleton:
-        vertex_data_freq = {}  # vertex-data: freqs
-        vertex_data_len = {}  # vertex-data: lengths
-        edge_data = {}  # edge-data
-        edge_data_backwards = {}  # edge-data -- backwards!
-
-        d_json = json.dumps(dict(sorted(d.items())), ensure_ascii=False)  # vcc: dict format -> string format (= key!)
+        d = dict(sorted(d.items()))
+        d_json = json.dumps(d, ensure_ascii=False)  # vcc: dict format -> string format (= key!)
         # XXX maybe: d_json = line -- there would be no need for converting forth and back
+
+        # Data for the given sentence skeleton:
+        vertex_freq = {}  # vertex-data: freqs
+        vertex_len = {}  # vertex-data: lengths
+        edge_forward = {}  # edge-data
+        edge_backward = {}  # edge-data -- backwards!
 
         # Put in the sentence skeleton
         # XXX ugly: code repetition from build_dc_recursively()
-        vertex_data_freq[d_json] = freq
-        vertex_data_len[d_json] = sum(1 if v is None else 2 for v in d.values())  # = count of slots + count of fillers
+        vertex_freq[d_json] = freq
+        vertex_len[d_json] = sum(1 if v is None else 2 for v in d.values())  # = count of slots + count of fillers
 
-        build_dc_recursively(d, freq, vertex_data_freq, vertex_data_len, edge_data, edge_data_backwards)
+        # TODO here edge_forward, edge_backward is swapped. Where is the second swap that makes this right?
+        build_dc_recursively(d, d_json, freq, vertex_freq, vertex_len, edge_forward, edge_backward)
         # algo: edges and vertices for each sentence skeleton
         # plus: put together afterwards below -- THAT IS OK!
 
         # Transfer vertices of the given sentence skeleton into main 'corpus_lattice_vertices_freq': freqs
-        for k in vertex_data_freq:
-            corpus_lattice_vertices_freq[k] += vertex_data_freq[k]
+        for k in vertex_freq:
+            corpus_lattice_vertices_freq[k] += vertex_freq[k]
         # Transfer vertices of the given sentence skeleton into main 'corpus_lattice_vertices_len': vcc lengths
-        for k, v in vertex_data_len.items():
+        for k, v in vertex_len.items():
             corpus_lattice_vertices_len.setdefault(k, v)
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_backward'
-        for i in edge_data:
-            for j in edge_data[i]:
+        for i in edge_forward:
+            for j in edge_forward[i]:
                 corpus_lattice_edges_backward.setdefault(i, {})[j] = 1
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_forward'
-        for i in edge_data_backwards:
-            for j in edge_data_backwards[i]:
+        for i in edge_backward:
+            for j in edge_backward[i]:
                 corpus_lattice_edges_forward.setdefault(i, {})[j] = 1
 
     # Take all vertices and filter out which is not needed
