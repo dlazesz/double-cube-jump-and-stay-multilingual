@@ -1,7 +1,7 @@
 import sys
 import json
 import argparse
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 
 def parse_args():
@@ -134,10 +134,10 @@ def main():
     # Idea #3: "jump and stay from root vertex"
 
     # Corpus lattice
-    corpus_lattice_vertices_freq = defaultdict(int)  # freq of vertices
-    corpus_lattice_vertices_len = {}  # length of VCCs at vertices
-    corpus_lattice_edges_backward = {}  # backward edges (= "in"-edges) down in corpus lattice
-    corpus_lattice_edges_forward = {}  # forward edges (= "out"-edges) up in corpus lattice
+    corpus_lattice_vertices_freq = Counter()  # Freq of vertices
+    corpus_lattice_vertices_len = {}  # Length of VCCs at vertices
+    corpus_lattice_edges_backward = defaultdict(dict)  # Backward edges (= "in"-edges) down in corpus lattice
+    corpus_lattice_edges_forward = defaultdict(dict)  # Forward edges (= "out"-edges) up in corpus lattice
 
     for line in sys.stdin:
         try:
@@ -160,10 +160,10 @@ def main():
         # XXX maybe: d_json = line -- there would be no need for converting forth and back
 
         # Data for the given sentence skeleton:
-        vertex_freq = {}  # vertex-data: freqs
-        vertex_len = {}  # vertex-data: lengths
-        edge_forward = {}  # edge-data
-        edge_backward = {}  # edge-data -- backwards!
+        vertex_freq = {}  # Vertex-data: freqs
+        vertex_len = {}  # Vertex-data: lengths
+        edge_forward = defaultdict(dict)  # Edge-data
+        edge_backward = defaultdict(dict)  # Edge-data -- backwards!
 
         # Put in the sentence skeleton
         # XXX ugly: code repetition from build_dc_recursively()
@@ -178,16 +178,15 @@ def main():
         for k in vertex_freq:
             corpus_lattice_vertices_freq[k] += vertex_freq[k]
         # Transfer vertices of the given sentence skeleton into main 'corpus_lattice_vertices_len': vcc lengths
-        for k, v in vertex_len.items():
-            corpus_lattice_vertices_len.setdefault(k, v)
+        corpus_lattice_vertices_len.update(vertex_len)
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_backward'
         for i in edge_backward:
             for j in edge_backward[i]:
-                corpus_lattice_edges_backward.setdefault(i, {})[j] = 1
+                corpus_lattice_edges_backward[i][j] = 1
         # Transfer edges of the given sentence skeleton into main 'corpus_lattice_edges_forward'
         for i in edge_forward:
             for j in edge_forward[i]:
-                corpus_lattice_edges_forward.setdefault(i, {})[j] = 1
+                corpus_lattice_edges_forward[i][j] = 1
 
     # Take all vertices and filter out which is not needed
     # point: not to miss any which is needed! :)
