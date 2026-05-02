@@ -154,8 +154,8 @@ def print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges
     freq = cl_vertices_freq[i]
 
     # Forward edges -- for "stay"
-    # sort: according to freq value, then vcc string-format key
-    for j in sorted(cl_edges_forward.get(i, {}), key=lambda x: (cl_vertices_freq[x], x)):
+    # Sort: according to freq value, then vcc string-format key
+    for j in sorted(cl_edges_forward.get(i, set()), key=lambda x: (cl_vertices_freq[x], x)):
         j_freq = cl_vertices_freq[j]
         ratio = freq / j_freq
         if ratio < stay:
@@ -187,13 +187,13 @@ def print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges
 
 def process(act, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward, stay, jump1, jump2, jump3):
     """How does it work
-        * Is there a stay? -> perform the step defined by the smallest-ratio stay
+        * Is there a stay? -> Perform the step defined by the smallest-ratio stay
 
-        * If no stay, is there a jump? -> perform the step defined by the largest-ratio jump
+        * If no stay, is there a jump? -> Perform the step defined by the largest-ratio jump
             iff there is a filler and there is a filler after the jump as well (jump1)
                 or there is no filler at all in the current vertex (jump2)
 
-        * Do it again if a step was made
+        * Repeat if a step was made
 
        So it performs necessary amount of jumps and stays mixed
     """
@@ -207,7 +207,7 @@ def process(act, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_
         # Is there a stay?
         # There are always one except at a sentence skeleton
         # Forward vertices
-        max_out: str | None = max(cl_edges_forward.get(act, {}), key=lambda x: (cl_vertices_freq[x], x),
+        max_out: str | None = max(cl_edges_forward.get(act, set()), key=lambda x: (cl_vertices_freq[x], x),
                                   default=None)
 
         freq_act = cl_vertices_freq[act]
@@ -234,7 +234,7 @@ def process(act, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_
             # If no stay, is there a(n appropriate) jump?
             # There are always one except at root
             # Backward vertices
-            max_inn: str | None = max(cl_edges_backward.get(act, {}), key=lambda x: (cl_vertices_freq[x], x),
+            max_inn: str | None = max(cl_edges_backward.get(act, set()), key=lambda x: (cl_vertices_freq[x], x),
                                       default=None)
 
             freq_max_inn = cl_vertices_freq[max_inn]
@@ -289,8 +289,7 @@ def process(act, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_
             break
 
     # What to do when we are at an sentence skeleton
-    # Current implementation: no sentence skeleton can be a pVCC -- THINK ABOUT IT!
-    # Because there are pVCCS like 'shine sun'
+    # Current implementation: no sentence skeleton can be a pVCC because there are pVCCS like 'shine sun'
     # Whether 'act' is a sentence skeleton
     # XXX is this condition OK? "it has no forward edge" -- THINK ABOUT IT!
     if act not in cl_edges_forward:
