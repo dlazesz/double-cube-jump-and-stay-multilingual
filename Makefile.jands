@@ -7,12 +7,10 @@ all:
 	make VERB=vet test
 
 train:
-	cat $(VERB).train.json | python3 impl.py --subject_slot $(SUBJECT_SLOT) > $(VERB).train.out3
-	cat $(VERB).train.out3 | grep pVCC | sort | uniq | sort -t '	' -k2,2nr -k1,1n > $(VERB).train.out3.pVCC
+	cat $(VERB).train.json | python3 impl.py --subject_slot $(SUBJECT_SLOT) 2> $(VERB).train.out3 > $(VERB).train.out3.pVCC
 
 test:
-	cat $(VERB).test.json | python3 impl.py --subject_slot $(SUBJECT_SLOT) > $(VERB).test.out3
-	cat $(VERB).test.out3 | grep pVCC | sort | uniq | sort -t '	' -k2,2nr -k1,1n > $(VERB).test.out3.pVCC
+	cat $(VERB).test.json | python3 impl.py --subject_slot $(SUBJECT_SLOT) 2> $(VERB).test.out3 > $(VERB).test.out3.pVCC
 
 diff:
 	diff hagy.train.out3.pVCC_orig hagy.train.out3.pVCC

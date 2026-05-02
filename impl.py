@@ -126,28 +126,33 @@ def main():
     cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward = build_corpus_lattice(args.subject_slot)
 
     # Take all vertices and filter out which is not needed
-
+    pvccs = Counter()
     # Process in a king of "good" order:
-    # sort: according to length, then reverse freq (by '-' trick), then alphabetical order
+    # Sort: according to length, then reverse freq (by '-' trick), then alphabetical order
     for n, i in enumerate(sorted(cl_vertices_freq, key=lambda x: (cl_vertices_len[x], -cl_vertices_freq[x], x)),
                           start=1):
 
-        print(f'#{n}')
+        print(f'#{n}', file=sys.stderr)
 
         print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward, stay, jump1)
 
         # Preliminary filter conditions
         if i not in cl_edges_forward:
-            print(' No out-edge, skip.')
+            print(' No out-edge, skip.', file=sys.stderr)
         elif cl_vertices_freq[i] < 3:
-            print(' Too rare (<3), skip.')
+            print(' Too rare (<3), skip.', file=sys.stderr)
         elif cl_vertices_len[i] > 8:
-            print(' Too long (>8), skip.')
+            print(' Too long (>8), skip.', file=sys.stderr)
         else:
-            print(' Processing.')
-            perform_jump_and_stay_steps(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward,
-                                        stay, jump1, jump2, jump3)
-        print()
+            print(' Processing.', file=sys.stderr)
+            ret = perform_jump_and_stay_steps(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward,
+                                              stay, jump1, jump2, jump3)
+            if ret is not None:
+                pvccs[ret] = ret[1]  # (Uniq) Line -> Freq
+        print(file=sys.stderr)
+
+    for k, _ in sorted(pvccs.items(), key=lambda x: (-x[1], x[0][0])):
+        print(*k, 'pVCC', sep='\t')
 
 
 def print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward, stay, jump1):
@@ -164,8 +169,8 @@ def print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges
             corpus_lattice = '^'
         else:
             corpus_lattice = '??'
-        print(f'->  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
-    print('x')
+        print(f'->  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}', file=sys.stderr)
+    print('x', file=sys.stderr)
 
     # Backward edges -- for "jump"
     # Sort: according to freq value, then vcc string-format key
@@ -178,11 +183,11 @@ def print_full(i, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges
             corpus_lattice = '^ !jump'
         else:
             corpus_lattice = '??'
-        print(f'<-  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}')
-    print('x')
+        print(f'<-  {j_freq}  {ratio:2.2f}  {j}  {corpus_lattice}', file=sys.stderr)
+    print('x', file=sys.stderr)
 
     # Current vertex
-    print(i, freq, cl_vertices_len[i], sep='\t')
+    print(i, freq, cl_vertices_len[i], sep='\t', file=sys.stderr)
 
 
 def perform_jump_and_stay_steps(act, cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward,
@@ -212,16 +217,16 @@ def perform_jump_and_stay_steps(act, cl_vertices_freq, cl_vertices_len, cl_edges
 
             # Whether 'max_out' stays compared to 'act' (there must be an act..max_out edge!)
             if stay_ratio < stay:
-                print(' A stay found, we follow.')
+                print(' A stay found, we follow.', file=sys.stderr)
                 path.append('v')
                 # Current vertex
-                print(max_out, freq_max_out, cl_vertices_len[max_out], sep='\t')
+                print(max_out, freq_max_out, cl_vertices_len[max_out], sep='\t', file=sys.stderr)
                 act = max_out
                 continue
         else:
-            stay_ratio = 0  # TODO here 0 do not satisfy the gt relation should be inf?
+            stay_ratio = float('inf')
 
-        print(f' No stay (ratio={stay_ratio:2.2f} > {stay}), we stop.')
+        print(f' No stay (ratio={stay_ratio:2.2f} > {stay}), we stop.', file=sys.stderr)
 
         # If no stay, is there a(n appropriate) jump?
         # Backward vertices
@@ -229,7 +234,7 @@ def perform_jump_and_stay_steps(act, cl_vertices_freq, cl_vertices_len, cl_edges
 
         # There are always one except at root
         if max_inn is None:
-            print(' No backward edge -- no jump, we stop.')
+            print(' No backward edge -- no jump, we stop.', file=sys.stderr)
             break
 
         # Freq-ratio on max_inn..act edge (there must be an max_inn..act edge!)
@@ -255,25 +260,27 @@ def perform_jump_and_stay_steps(act, cl_vertices_freq, cl_vertices_len, cl_edges
         # Is jump?
         # Whether 'max_inn' jumps compared to 'act' (there must be a max_inn..act edge!)
         if jump_ratio > jump:
-            print(f' An appropriate jump ({info}, {jump}<) found, we follow.')
+            print(f' An appropriate jump ({info}, {jump}<) found, we follow.', file=sys.stderr)
             path.append(jump_type)
             # Current vertex
-            print(max_inn, freq_max_inn, cl_vertices_len[max_inn], sep='\t')
+            print(max_inn, freq_max_inn, cl_vertices_len[max_inn], sep='\t', file=sys.stderr)
             act = max_inn
             continue
 
-        print(f' No appropriate jump ({info}, {jump_ratio:2.2f} < {jump}), we stop.')
+        print(f' No appropriate jump ({info}, {jump_ratio:2.2f} < {jump}), we stop.', file=sys.stderr)
         break
 
     # What to do when we are at an sentence skeleton?
     # Current implementation: no sentence skeleton can be a pVCC because there are pVCCS like 'shine sun'
     # Whether 'act' is a sentence skeleton
     if act not in cl_edges_forward:
-        print(' Concrete sentence skeleton.')
+        print(' Concrete sentence skeleton.', file=sys.stderr)
+        return None
     else:
         # pathstr = '0' if len(path) == 0 else ''.join(path)
         # print(act, freq_act, cl_vertices_len[act], f'[{pathstr}]', pVCC, sep='\t')
-        print(act, freq_act, cl_vertices_len[act], 'pVCC', sep='\t')
+        print(act, freq_act, cl_vertices_len[act], 'pVCC', sep='\t', file=sys.stderr)
+        return act, freq_act, cl_vertices_len[act]
 
 
 if __name__ == '__main__':
