@@ -1,39 +1,45 @@
-["nsubj", null, "obj", null]	347	2	pVCC
-["nsubj", null, "obj", null, "obl", null]	176	3	pVCC
-["nsubj", null, "obj", "tieto"]	14	3	pVCC
-["nsubj", null, "obj", null, "obl", "vuosi"]	8	4	pVCC
-["nsubj", null, "obj", "alku", "obl", null]	7	4	pVCC
-["nsubj", null, "xcomp", "kuulla"]	6	3	pVCC
-["nsubj", null, "obj", "surma"]	5	3	pVCC
-["nsubj", null, "obj", "tieto", "obl", null]	5	4	pVCC
-["Tra", "valmis", "nsubj", null, "obj", null]	5	4	pVCC
-["nsubj", "mies"]	4	2	pVCC
-["nsubj", null, "obj", null, "obl", "käyttö"]	4	4	pVCC
-["nsubj", null, "obl", "aika"]	4	3	pVCC
-["nsubj", "tyttö", "obj", null]	4	3	pVCC
-["Nom", "olla", "nsubj", null, "obj", null]	3	4	pVCC
-["nsubj", null, "obj", "ääni", "obl", null]	3	4	pVCC
-["nsubj", null, "obj", "asema"]	3	3	pVCC
-["nsubj", null, "obj", "asunto"]	3	3	pVCC
-["nsubj", null, "obj", "euro"]	3	3	pVCC
-["nsubj", null, "obj", "huomio"]	3	3	pVCC
-["nsubj", null, "obj", "käsitys"]	3	3	pVCC
-["nsubj", null, "obj", "korvaus"]	3	3	pVCC
-["nsubj", null, "obj", "koulutus"]	3	3	pVCC
-["nsubj", null, "obj", null, "obl", "päätös"]	3	4	pVCC
-["nsubj", null, "obj", "raha", "obl", null]	3	4	pVCC
-["nsubj", null, "obj", "tuki", "obl", null]	3	4	pVCC
-["nsubj", null, "obj", "vastaus"]	3	3	pVCC
-["nsubj", null, "xcomp", "tietää"]	3	3	pVCC
-["nsubj", null, "xcomp", "valita"]	3	3	pVCC
-["Tra", "vakuuttua", "nsubj", null, "obj", null]	3	4	pVCC
-["nsubj", "ihminen", "obj", null, "obl", null]	2	4	pVCC
-["nsubj", "lapsi", "xcomp", null]	2	3	pVCC
-["nsubj", "matkustaja", "obj", null]	2	3	pVCC
-["nsubj", null, "obj", "molla", "obl", null]	2	4	pVCC
-["nsubj", null, "obj", null, "obl=lähtien", "alku"]	2	4	pVCC
-["nsubj", null, "obj", "palkinto", "obl", null]	2	4	pVCC
-["nsubj", null, "obj", "rahoitus", "obl", null]	2	4	pVCC
-["nsubj", null, "obj", "viesti", "obl", null]	2	4	pVCC
-["nsubj", null, "obj", "virka", "obl", null]	2	4	pVCC
-["nsubj", "opiskelija", "obj", null]	2	3	pVCC
+{"Nom": null, "obj": null}	347	2	pVCC
+{"Nom": null, "obj": null, "obl": null}	176	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	170	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl": null}	87	4	pVCC
+{"Nom": null, "obj": "tieto"}	14	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "tieto"}	7	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl": "vuosi"}	7	5	pVCC
+{"Nom": null, "obj": "alku", "obl": null}	7	4	pVCC
+{"Nom": null, "xcomp": "kuulla"}	6	3	pVCC
+{"Nom": null, "Tra": "valmis", "obj": null}	5	4	pVCC
+{"Nom": null, "obj": "tieto", "obl": null}	5	4	pVCC
+{"Nom": null, "nsubj": "mies"}	4	3	pVCC
+{"Nom": null, "nsubj": "tyttö", "obj": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "surma"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obl": "aika"}	4	4	pVCC
+{"Nom": null, "obj": null, "obl": "käyttö"}	4	4	pVCC
+{"Ill": "näyttää", "Nom": null}	3	3	pVCC
+{"Nom": "olla", "obj": null}	3	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "alku", "obl": null}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "asema"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "euro"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "huomio"}	3	4	pVCC
+{"Nom": null, "obj": "asunto"}	3	3	pVCC
+{"Nom": null, "obj": "käsitys"}	3	3	pVCC
+{"Nom": null, "xcomp": "tietää"}	3	3	pVCC
+{"Nom": null, "xcomp": "unohtaa"}	3	3	pVCC
+{"Nom": null, "xcomp": "valita"}	3	3	pVCC
+{"Nom": null, "Tra": "vakuuttua", "nsubj": null, "obj": null}	2	5	pVCC
+{"Nom": null, "nsubj": "ihminen", "obj": null, "obl": null}	2	5	pVCC
+{"Nom": null, "nsubj": "lapsi", "xcomp": null}	2	4	pVCC
+{"Nom": null, "nsubj": "matkustaja", "obj": null}	2	4	pVCC
+{"Nom": null, "nsubj": "opiskelija", "obj": null}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "korvaus"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "koulutus"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "palkinto", "obl": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "raha", "obl": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "rahoitus", "obl": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "tuki", "obl": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "vastaus"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "ääni", "obl": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl": "päätös"}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=lähtien": "alku"}	2	5	pVCC
+{"Nom": null, "obj": "molla", "obl": null}	2	4	pVCC
+{"Nom": null, "obj": "viesti", "obl": null}	2	4	pVCC
+{"Nom": null, "obj": "virka", "obl": null}	2	4	pVCC

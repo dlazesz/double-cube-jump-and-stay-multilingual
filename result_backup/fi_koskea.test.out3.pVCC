@@ -1,3 +1,6 @@
-["nsubj", null, "obj", null]	212	2	pVCC
-["nsubj", null, "obj", "ala"]	3	3	pVCC
-["nsubj", null, "obj", "jäsen#valtio"]	3	3	pVCC
+{"Nom": null, "obj": null}	212	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	55	3	pVCC
+{"Nom": null, "obj": "täytäntöönpano"}	5	3	pVCC
+{"Nom": null, "obj": "tavara#kuljetus"}	3	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "ala"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "jäsen#valtio"}	2	4	pVCC

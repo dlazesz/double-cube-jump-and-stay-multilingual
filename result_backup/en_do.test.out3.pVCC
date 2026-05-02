@@ -1,13 +1,15 @@
-["nsubj", null, "obj", null]	326	2	pVCC
-["nsubj", null, "obj", "job"]	23	3	pVCC
-["nsubj", null, "obj", "work"]	22	3	pVCC
-["nsubj", null, "obj", "thing"]	16	3	pVCC
-["nsubj", null, "obj", "business"]	5	3	pVCC
-["nsubj", "bush", "obj", null]	4	3	pVCC
-["iobj", null, "nsubj", null, "obj", "favor"]	3	4	pVCC
-["nsubj", null, "obj", "best"]	3	3	pVCC
-["nsubj", null, "obj", "damage"]	3	3	pVCC
-["nsubj", null, "obj", "deal"]	3	3	pVCC
-["nsubj", null, "obj", "lot"]	3	3	pVCC
-["nsubj", "guy", "obj", null]	2	3	pVCC
-["nsubj", null, "obl", "with"]	2	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	214	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "job"}	18	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "work"}	16	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "thing"}	10	4	pVCC
+{"Nom": null, "obj": "more"}	6	3	pVCC
+{"Nom": null, "obj": "research"}	5	3	pVCC
+{"Nom": null, "nsubj": "bush", "obj": null}	4	4	pVCC
+{"Nom": null, "iobj": null, "obj": "favor"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "business"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "damage"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "deal"}	3	4	pVCC
+{"Nom": null, "obj": "test"}	3	3	pVCC
+{"Nom": null, "nsubj": "guy", "obj": null}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "lot"}	2	4	pVCC
+{"Nom": null, "obl": "with"}	2	3	pVCC

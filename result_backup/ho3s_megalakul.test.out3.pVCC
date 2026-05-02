@@ -1,4 +1,0 @@
-["Nom", null]	32	1	pVCC
-["Ine", null, "Nom", null]	12	2	pVCC
-["Nom", "ezred"]	3	2	pVCC
-["Ine", null, "Nom", null, "Sup", "bázis"]	2	4	pVCC

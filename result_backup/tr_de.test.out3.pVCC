@@ -1,28 +1,30 @@
-["nsubj", null, "obj", null]	237	2	pVCC
-["nsubj", null, "obj", "ol"]	10	3	pVCC
-["nsubj", "kerem"]	7	2	pVCC
-["nsubj", null, "obj", "gel"]	7	3	pVCC
-["nsubj", null, "obj", "git"]	6	3	pVCC
-["nsubj", null, "obj", "bak"]	5	3	pVCC
-["nsubj", null, "obj", "bil"]	5	3	pVCC
-["nsubj", null, "obj", "evet"]	5	3	pVCC
-["nsubj", null, "obj", "gir"]	5	3	pVCC
-["nsubj", null, "obj", "iste"]	5	3	pVCC
-["nsubj", "adam", "obj", null]	4	3	pVCC
-["nsubj", "kadın", "obj", null]	4	3	pVCC
-["nsubj", "kerem", "obj", null]	4	3	pVCC
-["nsubj", null, "obj", "iyi"]	4	3	pVCC
-["nsubj", null, "obj", "var"]	4	3	pVCC
-["nsubj", "baba"]	3	2	pVCC
-["nsubj", "jul", "obj", null]	3	3	pVCC
-["nsubj", "maryline", "obj", null]	3	3	pVCC
-["nsubj", null, "obj", "çalış"]	3	3	pVCC
-["nsubj", null, "obj", "düşün"]	3	3	pVCC
-["nsubj", null, "obj", "gör"]	3	3	pVCC
-["nsubj", null, "obj", "oku"]	3	3	pVCC
-["nsubj", null, "obj", "yap"]	3	3	pVCC
-["nsubj", null, "obj", "yet"]	3	3	pVCC
-["Nom", "abla", "nsubj", null, "obj", null]	2	4	pVCC
-["nsubj", "katana", "obj", null]	2	3	pVCC
-["nsubj", "kemal", "obj", null]	2	3	pVCC
-["nsubj", "sebze", "obj", "yeşil"]	2	4	pVCC
+{"Nom": null, "obj": null}	237	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	69	3	pVCC
+{"Nom": null, "obj": "ol"}	10	3	pVCC
+{"Nom": null, "nsubj": "kerem"}	7	3	pVCC
+{"Nom": null, "obj": "gel"}	7	3	pVCC
+{"Nom": null, "obj": "git"}	6	3	pVCC
+{"Nom": null, "obj": "bak"}	5	3	pVCC
+{"Nom": null, "obj": "bil"}	5	3	pVCC
+{"Nom": null, "obj": "gir"}	5	3	pVCC
+{"Nom": null, "obj": "iste"}	5	3	pVCC
+{"Nom": null, "nsubj": "adam", "obj": null}	4	4	pVCC
+{"Nom": null, "nsubj": "kadın", "obj": null}	4	4	pVCC
+{"Nom": null, "nsubj": "kerem", "obj": null}	4	4	pVCC
+{"Nom": null, "obj": "iyi"}	4	3	pVCC
+{"Nom": null, "obj": "var"}	4	3	pVCC
+{"Nom": null, "nsubj": "baba"}	3	3	pVCC
+{"Nom": null, "nsubj": "jul", "obj": null}	3	4	pVCC
+{"Nom": null, "nsubj": "maryline", "obj": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "düşün"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "evet"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "ol"}	3	4	pVCC
+{"Nom": null, "obj": "gör"}	3	3	pVCC
+{"Nom": null, "obj": "oku"}	3	3	pVCC
+{"Nom": null, "obj": "yap"}	3	3	pVCC
+{"Nom": null, "obj": "yet"}	3	3	pVCC
+{"Nom": null, "obj": "çalış"}	3	3	pVCC
+{"Nom": "abla", "obj": null}	2	3	pVCC
+{"Nom": null, "nsubj": "katana", "obj": null}	2	4	pVCC
+{"Nom": null, "nsubj": "kemal", "obj": null}	2	4	pVCC
+{"Nom": null, "nsubj": "sebze", "obj": "yeşil"}	2	5	pVCC

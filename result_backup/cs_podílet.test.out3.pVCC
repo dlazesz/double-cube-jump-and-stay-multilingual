@@ -1,2 +1,4 @@
-["Acc", "se", "Loc=na", null, "nsubj", null]	31	4	pVCC
-["Acc", "se", "Loc=na", null, "nsubj", null, "obl", "procento"]	4	6	pVCC
+{"Acc": "se", "Loc=na": null, "Nom": null}	31	4	pVCC
+{"Acc": "se", "Loc=na": null, "Nom": null, "nsubj": null}	17	5	pVCC
+{"Acc": "se", "Loc=na": null, "Nom": null, "nsubj": null, "obl=v": null}	5	6	pVCC
+{"Acc": "se", "Loc=na": null, "Nom": null, "obl": "procento"}	4	6	pVCC

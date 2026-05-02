@@ -1,0 +1,7 @@
+{"Nom": null, "nsubj": null, "obl": null}	56	3	pVCC
+{"Nom": null, "nsubj": null, "obl": "prosentti"}	6	4	pVCC
+{"Nom": null, "nsubj": "korko", "obl": null}	5	4	pVCC
+{"Nom": null, "nsubj": "määrä", "obl": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl": "euro"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl": "vuosi"}	3	4	pVCC
+{"Nom": null, "nsubj": "hinta", "obl": null}	2	4	pVCC

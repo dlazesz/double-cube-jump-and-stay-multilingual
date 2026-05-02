@@ -1,12 +1,13 @@
-["nsubj", null]	65	1	pVCC
-["nsubj", null, "obl=unter", null]	17	2	pVCC
-["nsubj", null, "obl=um", "prozent"]	6	3	pVCC
-["nsubj", "kurs"]	5	2	pVCC
-["nsubj", "schuß"]	5	2	pVCC
-["nsubj", null, "obl=auf", null, "obl=um", null]	4	3	pVCC
-["nsubj", "aktie", "obl=auf", null]	3	3	pVCC
-["nsubj", "entscheidung"]	3	2	pVCC
-["nsubj", null, "obl=in", "bereich"]	3	3	pVCC
-["nsubj", null, "obl=in", null, "obl=um", null]	3	3	pVCC
-["nsubj", null, "obl=nach", null, "obl=um", "prozent"]	3	4	pVCC
-["nsubj", null, "obl=unter", "gesetz"]	3	3	pVCC
+{"Nom": null, "nsubj": null}	45	2	pVCC
+{"Nom": null, "nsubj": null, "obl=unter": null}	15	3	pVCC
+{"Nom": null, "nsubj": "kurs"}	5	3	pVCC
+{"Nom": null, "nsubj": "schuß"}	5	3	pVCC
+{"Nom": null, "nsubj": null, "obl=auf": null, "obl=um": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obl=um": "prozent"}	4	4	pVCC
+{"Nom": null, "nsubj": "aktie", "obl=auf": null}	3	4	pVCC
+{"Nom": null, "nsubj": "entscheidung"}	3	3	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "bereich"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=unter": "gesetz"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=bei": null, "obl=laut": null}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": null, "obl=um": null}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obl=nach": null, "obl=um": "prozent"}	2	5	pVCC

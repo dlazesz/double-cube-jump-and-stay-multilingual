@@ -1,3 +1,4 @@
-["nsubj", null, "obj", null, "obl", null]	20	3	pVCC
-["nsubj", null, "obj", "tieto", "obl", null]	9	4	pVCC
-["nsubj", null, "obj", "osa"]	3	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl": null}	12	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "tieto", "obl": null}	6	5	pVCC
+{"Nom": null, "obj": "osa"}	3	3	pVCC
+{"Nom": null, "nsubj": "jäsen#valtio", "obj": "tieto", "obl": null}	2	6	pVCC

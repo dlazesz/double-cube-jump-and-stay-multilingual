@@ -1,19 +1,20 @@
-["nsubj", null]	155	1	pVCC
-["nsubj", null, "obj", null]	90	2	pVCC
-["Acc", "sich", "nsubj", null]	37	3	pVCC
-["nsubj", null, "obj", null, "obl=in", null]	35	3	pVCC
-["Acc", "sich", "nsubj", null, "obl=in", null]	17	4	pVCC
-["nsubj", null, "obl=auf", "server"]	7	3	pVCC
-["nsubj", "information", "obl=auf", null]	6	3	pVCC
-["nsubj", null, "obj", null, "obl=in", "telepolis"]	6	4	pVCC
-["nsubj", "unknown"]	5	2	pVCC
-["nsubj", null, "obj", "bericht"]	4	3	pVCC
-["Acc", "sich", "nsubj", "information", "obl=auf", null]	3	5	pVCC
-["Acc", "sich", "nsubj", null, "obl=auf", "seite"]	3	5	pVCC
-["nsubj", null, "obj", "datei"]	3	3	pVCC
-["nsubj", null, "obl=in", "internet"]	3	3	pVCC
-["nsubj", "antrag", "obj", "mehrheit"]	2	4	pVCC
-["nsubj", null, "obj", "eingang", "obl=in", "datenbank"]	2	5	pVCC
-["nsubj", null, "obj", "information", "obl=in", null]	2	4	pVCC
-["nsubj", null, "obj", null, "obl=auf", "website"]	2	4	pVCC
-["nsubj", null, "obj", "version", "obl=in", null]	2	4	pVCC
+{"Nom": null, "nsubj": null}	126	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	73	3	pVCC
+{"Nom": null, "nsubj": null, "obl=in": null}	53	3	pVCC
+{"Acc": "sich", "Nom": null, "nsubj": null}	36	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=in": null}	31	4	pVCC
+{"Acc": "sich", "Nom": null, "nsubj": null, "obl=in": null}	17	5	pVCC
+{"Nom": null, "nsubj": "information", "obl=auf": null}	6	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=in": "telepolis"}	6	5	pVCC
+{"Nom": null, "nsubj": null, "obl=auf": "server"}	6	4	pVCC
+{"Nom": null, "nsubj": "unknown"}	5	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "bericht"}	4	4	pVCC
+{"Acc": "sich", "Nom": null, "nsubj": "information", "obl=auf": null}	3	6	pVCC
+{"Acc": "sich", "Nom": null, "nsubj": null, "obl=auf": "seite"}	3	6	pVCC
+{"Nom": null, "nsubj": null, "obj": "datei"}	3	4	pVCC
+{"Nom": null, "nsubj": "antrag", "obj": "mehrheit"}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "eingang", "obl=in": "datenbank"}	2	6	pVCC
+{"Nom": null, "nsubj": null, "obj": "information", "obl=in": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "version", "obl=in": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "website"}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "internet"}	2	4	pVCC

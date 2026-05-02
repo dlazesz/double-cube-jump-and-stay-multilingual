@@ -1,10 +1,11 @@
-["nsubj", null, "obj", null]	103	2	pVCC
-["nsubj", null, "obj", "sich"]	47	3	pVCC
-["nsubj", null, "obj", null, "obl=auf", "cebit"]	4	4	pVCC
-["nsubj", null, "obj", "unknown"]	4	3	pVCC
-["nsubj", "unknown", "obj", null]	4	3	pVCC
-["nsubj", "amd", "obj", null]	3	3	pVCC
-["nsubj", null, "obj", null, "obl=auf", "stand"]	3	4	pVCC
-["nsubj", null, "obj", "prototyp"]	3	3	pVCC
-["nsubj", null, "obj", "version"]	3	3	pVCC
-["nsubj", "opera", "obj", "banner"]	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	88	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "sich"}	39	4	pVCC
+{"Nom": null, "nsubj": "unknown", "obj": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "cebit"}	4	5	pVCC
+{"Nom": null, "nsubj": "amd", "obj": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "prototyp"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "unknown"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "version"}	3	4	pVCC
+{"Nom": null, "nsubj": "opera", "obj": "banner"}	2	5	pVCC
+{"Nom": null, "nsubj": "richter", "obj": "sich", "obl=in": null}	2	6	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "stand"}	2	5	pVCC

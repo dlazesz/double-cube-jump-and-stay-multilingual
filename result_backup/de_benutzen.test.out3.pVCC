@@ -1,0 +1,4 @@
+{"Nom": null, "nsubj": null, "obj": null}	46	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "unknown"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "internet"}	3	4	pVCC
+{"Nom": null, "nsubj": "engine", "obj": "portable", "obl=als": "modell"}	2	7	pVCC

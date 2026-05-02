@@ -1,3 +1,5 @@
-["nsubj", null, "obj", null]	19	2	pVCC
-["iobj", null, "nsubj", null, "obj", "tür"]	2	4	pVCC
-["nsubj", null, "obj", "pforte", "obl=an", null, "obl=für", "tag"]	2	6	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	12	3	pVCC
+{"Nom": null, "iobj": null, "nsubj": null, "obj": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=in": null}	3	4	pVCC
+{"Nom": null, "iobj": null, "nsubj": null, "obj": "tür"}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "pforte", "obl=an": null, "obl=für": "tag"}	2	7	pVCC

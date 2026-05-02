@@ -1,7 +1,8 @@
-["nsubj", null]	344	1	pVCC
-["nsubj", "heer"]	12	2	pVCC
-["nsubj", "minister"]	8	2	pVCC
-["nsubj", "mr."]	6	2	pVCC
-["nsubj", null, "obl", null, "obl=in", null]	5	3	pVCC
-["nsubj", "heer", "xcomp=te", null]	4	3	pVCC
-["nsubj", "minister", "obl=in", null]	3	3	pVCC
+{"Nom": null, "nsubj": null}	273	2	pVCC
+{"Nom": null, "nsubj": "heer"}	12	3	pVCC
+{"Nom": null, "nsubj": "minister"}	8	3	pVCC
+{"Nom": null, "nsubj": "mr."}	6	3	pVCC
+{"Nom": null, "nsubj": "heer", "xcomp=te": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obl": null, "obl=in": null}	4	4	pVCC
+{"Nom": null, "nsubj": "minister", "obl=in": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl": null, "obl=bij": null}	2	4	pVCC

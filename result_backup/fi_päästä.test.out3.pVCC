@@ -1,6 +1,8 @@
-["nsubj", null, "obl", null]	84	2	pVCC
-["Ill", null, "nsubj", null]	35	2	pVCC
-["Ill", "tutustua", "nsubj", null]	4	3	pVCC
-["Ade", "painaa", "nsubj", null, "obl", null]	3	4	pVCC
-["nsubj", null, "obl", "yhteis#ymmärrys"]	3	3	pVCC
-["Ill", null, "nsubj", "vastustaja"]	2	3	pVCC
+{"Nom": null, "obl": null}	84	2	pVCC
+{"Nom": null, "nsubj": null, "obl": null}	37	3	pVCC
+{"Ill": null, "Nom": null}	35	2	pVCC
+{"Ill": null, "Nom": null, "nsubj": null}	16	3	pVCC
+{"Ill": "tutustua", "Nom": null}	4	3	pVCC
+{"Ade": "painaa", "Nom": null, "obl": null}	3	4	pVCC
+{"Nom": null, "obl": "yhteis#ymmärrys"}	3	3	pVCC
+{"Ill": null, "Nom": null, "nsubj": "vastustaja"}	2	4	pVCC

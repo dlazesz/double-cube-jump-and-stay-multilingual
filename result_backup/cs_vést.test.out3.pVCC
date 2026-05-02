@@ -1,7 +1,8 @@
-["nsubj", null]	61	1	pVCC
-["nsubj", null, "obl=k", null]	28	2	pVCC
-["nsubj", null, "obj", null]	19	2	pVCC
-["nsubj", "který"]	6	2	pVCC
-["nsubj", null, "obl=k", "ten"]	5	3	pVCC
-["nsubj", "který", "obl=k", null]	3	3	pVCC
-["nsubj", "cesta", "obl=přes", null]	2	3	pVCC
+{"Nom": null, "nsubj": null}	40	2	pVCC
+{"Nom": null, "nsubj": null, "obl=k": null}	21	3	pVCC
+{"Nom": null, "obj": null}	19	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	10	3	pVCC
+{"Nom": null, "nsubj": "který"}	6	3	pVCC
+{"Nom": null, "nsubj": null, "obl=k": "ten"}	4	4	pVCC
+{"Nom": null, "nsubj": "který", "obl=k": null}	3	4	pVCC
+{"Nom": null, "nsubj": "cesta", "obl=přes": null}	2	4	pVCC

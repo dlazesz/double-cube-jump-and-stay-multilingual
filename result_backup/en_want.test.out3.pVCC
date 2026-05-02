@@ -1,11 +1,12 @@
-["nsubj", null, "xcomp=to", null]	209	2	pVCC
-["nsubj", null, "obj", null]	93	2	pVCC
-["nsubj", null, "xcomp=to", "go"]	13	3	pVCC
-["nsubj", null, "xcomp=to", "know"]	11	3	pVCC
-["nsubj", null, "xcomp=to", "take"]	9	3	pVCC
-["nsubj", null, "xcomp=to", "do"]	8	3	pVCC
-["nsubj", null, "xcomp=to", "have"]	8	3	pVCC
-["nsubj", null, "xcomp=to", "get"]	6	3	pVCC
-["nsubj", null, "xcomp=to", "see"]	6	3	pVCC
-["nsubj", null, "xcomp=to", "buy"]	4	3	pVCC
-["nsubj", null, "xcomp=to", "leave"]	3	3	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": null}	176	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	90	3	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "go"}	12	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "know"}	9	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "have"}	8	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "take"}	8	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "do"}	7	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "see"}	6	4	pVCC
+{"Nom": null, "xcomp=to": "help"}	5	3	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "get"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "buy"}	3	4	pVCC
+{"Nom": null, "xcomp=to": "leave"}	3	3	pVCC

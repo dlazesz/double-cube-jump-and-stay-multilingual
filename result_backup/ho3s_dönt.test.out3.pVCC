@@ -1,5 +1,0 @@
-["Nom", null]	49	1	pVCC
-["Del", null, "Nom", null]	19	2	pVCC
-["Del", null, "Nom", "kormány"]	4	3	pVCC
-["Del", null, "Ess", null, "Ine", null, "Nom", null]	3	4	pVCC
-["Nom", null, "Sup", null, "notdef=mellett", "-"]	2	4	pVCC

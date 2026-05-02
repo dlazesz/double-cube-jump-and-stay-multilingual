@@ -1,7 +1,7 @@
-["nsubj", null]	27	1	pVCC
-["nsubj", null, "obj", null]	14	2	pVCC
-["nsubj", null, "obl=von", null]	7	2	pVCC
-["nsubj", null, "obj", null, "obl=auf", null]	5	3	pVCC
-["nsubj", null, "obj", null, "obl=über", "internet"]	2	4	pVCC
-["nsubj", null, "obj", null, "obl=von", "server"]	2	4	pVCC
-["nsubj", null, "obl=bei", "start"]	2	3	pVCC
+{"Nom": null}	27	1	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	9	3	pVCC
+{"Nom": null, "obl=von": null}	7	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=von": "server"}	2	5	pVCC
+{"Nom": null, "obj": null, "obl=über": "internet"}	2	4	pVCC
+{"Nom": null, "obl=bei": "start"}	2	3	pVCC

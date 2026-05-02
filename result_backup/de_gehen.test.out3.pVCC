@@ -1,17 +1,18 @@
-["nsubj", null]	206	1	pVCC
-["nsubj", null, "obl=in", null]	73	2	pVCC
-["nsubj", null, "obl=in", "runde"]	6	3	pVCC
-["nsubj", null, "obl=in", "berufung"]	4	3	pVCC
-["nsubj", null, "obl=in", "offensive"]	4	3	pVCC
-["nsubj", null, "obl=in", "revision"]	4	3	pVCC
-["nsubj", null, "obl=an", "börse"]	3	3	pVCC
-["nsubj", null, "obl=an", "start", "obl=in", null]	3	4	pVCC
-["nsubj", null, "obl=in", "betrieb"]	3	3	pVCC
-["nsubj", null, "obl=in", "internet"]	3	3	pVCC
-["nsubj", null, "obl=in", "netz"]	3	3	pVCC
-["nsubj", null, "obl=um", "prinzip"]	3	3	pVCC
-["nsubj", "preis", "obl=an", null]	3	3	pVCC
-["nsubj", null, "obj", null, "obl=aus", "weg"]	2	4	pVCC
-["nsubj", null, "obl=in", "linie", "obl=um", null]	2	4	pVCC
-["nsubj", null, "obl=in", null, "obl=über", "bühne"]	2	4	pVCC
-["nsubj", "unknown", "obl=in", null, "obl=mit", null]	2	4	pVCC
+{"Nom": null, "nsubj": null}	183	2	pVCC
+{"Nom": null, "nsubj": null, "obl=in": null}	66	3	pVCC
+{"Nom": null, "nsubj": null, "obl=um": null}	46	3	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "runde"}	6	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "offensive"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "revision"}	4	4	pVCC
+{"Nom": null, "obl=in": "berufung"}	4	3	pVCC
+{"Nom": null, "nsubj": "preis", "obl=an": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=an": "start", "obl=in": null}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "betrieb"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "internet"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "netz"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=um": "prinzip"}	3	4	pVCC
+{"Nom": null, "obl=an": "börse"}	3	3	pVCC
+{"Nom": null, "nsubj": "unknown", "obl=in": null, "obl=mit": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "linie", "obl=um": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obl=in": null, "obl=über": "bühne"}	2	5	pVCC
+{"Nom": null, "obj": null, "obl=aus": "weg"}	2	4	pVCC

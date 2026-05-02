@@ -1,17 +1,17 @@
-["nsubj", null, "obj", null]	83	2	pVCC
-["nsubj", null, "obj", "version"]	9	3	pVCC
-["nsubj", "netscape", "obj", null]	6	3	pVCC
-["nsubj", "microsoft", "obj", null]	5	3	pVCC
-["nsubj", null, "obj", "text"]	5	3	pVCC
-["nsubj", null, "obj", "update"]	5	3	pVCC
-["nsubj", null, "obj", "entwurf"]	4	3	pVCC
-["nsubj", null, "obj", "information"]	4	3	pVCC
-["nsubj", null, "obj", null, "obl=auf", "website"]	4	4	pVCC
-["nsubj", null, "obj", null, "obl=in", "internet"]	4	4	pVCC
-["nsubj", null, "obj", "ergebnis"]	3	3	pVCC
-["nsubj", null, "obj", null, "obl", "ende"]	3	4	pVCC
-["nsubj", null, "obj", "patch"]	3	3	pVCC
-["nsubj", "unknown", "obj", null]	3	3	pVCC
-["nsubj", "apple", "obj", null, "obl=in", null]	2	4	pVCC
-["nsubj", null, "obj", null, "obl", null, "obl=nach", null]	2	4	pVCC
-["nsubj", "world", "obj", null, "obl=als", null]	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	75	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "version"}	7	4	pVCC
+{"Nom": null, "nsubj": "netscape", "obj": null}	6	4	pVCC
+{"Nom": null, "nsubj": "microsoft", "obj": null}	5	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "text"}	5	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "information"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "update"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "website"}	4	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=in": "internet"}	4	5	pVCC
+{"Nom": null, "nsubj": "unknown", "obj": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "entwurf"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl": "ende"}	3	5	pVCC
+{"Nom": null, "nsubj": "apple", "obj": null, "obl=in": null}	2	5	pVCC
+{"Nom": null, "nsubj": "world", "obj": null, "obl=als": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "ergebnis"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "patch"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl": null, "obl=nach": null}	2	5	pVCC

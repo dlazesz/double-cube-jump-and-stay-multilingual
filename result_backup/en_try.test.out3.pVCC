@@ -1,6 +1,11 @@
-["nsubj", null]	187	1	pVCC
-["nsubj", null, "xcomp=to", null]	106	2	pVCC
-["nsubj", null, "xcomp=to", "get"]	11	3	pVCC
-["nsubj", null, "xcomp=to", "make"]	6	3	pVCC
-["nsubj", null, "xcomp=to", "find"]	4	3	pVCC
-["nsubj", null, "xcomp=to", "help"]	3	3	pVCC
+{"Nom": null}	187	1	pVCC
+{"Nom": null, "xcomp=to": null}	106	2	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": null}	58	3	pVCC
+{"Nom": null, "xcomp=to": "get"}	11	3	pVCC
+{"Nom": null, "obj": "place"}	6	3	pVCC
+{"Nom": null, "xcomp=to": "make"}	6	3	pVCC
+{"Nom": null, "xcomp=to": "find"}	4	3	pVCC
+{"Nom": null, "xcomp=to": "keep"}	4	3	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "get"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "make"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=to": "help"}	2	4	pVCC

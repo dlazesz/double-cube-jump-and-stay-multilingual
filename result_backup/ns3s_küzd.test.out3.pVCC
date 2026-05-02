@@ -1,3 +1,0 @@
-["Nom", null]	51	1	pVCC
-["Cau", null, "Nom", null]	13	2	pVCC
-["Nom", null, "Nom=ellen", null, "Sup", null]	2	3	pVCC

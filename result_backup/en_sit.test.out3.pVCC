@@ -1,1 +1,5 @@
-["nsubj", null]	34	1	pVCC
+{"Nom": null}	34	1	pVCC
+{"Nom": null, "nsubj": null}	16	2	pVCC
+{"Nom": null, "nsubj": null, "obl=in": null}	5	3	pVCC
+{"Nom": null, "nsubj": null, "obl=on": null}	4	3	pVCC
+{"Nom": null, "obl=at": "table"}	2	3	pVCC

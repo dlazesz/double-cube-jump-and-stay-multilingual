@@ -1,13 +1,13 @@
-["nsubj", null, "obj", null]	80	2	pVCC
-["nsubj", "obama", "obj", null]	13	3	pVCC
-["nsubj", null, "obj", "valg"]	10	3	pVCC
-["nsubj", "barack", "obj", null]	9	3	pVCC
-["nsubj", "romney", "obj", null]	8	3	pVCC
-["nsubj", null, "obj", "kamp"]	7	3	pVCC
-["nsubj", null, "obj", "valgmannstemme"]	6	3	pVCC
-["nsubj", null, "obj", "stat"]	5	3	pVCC
-["nsubj", "mitt"]	4	2	pVCC
-["nsubj", "lag"]	3	2	pVCC
-["nsubj", null, "obj", "florida"]	3	3	pVCC
-["nsubj", null, "obj", "ohio"]	3	3	pVCC
-["nsubj", "obama", "obj", null, "obl=i", "2008"]	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	55	3	pVCC
+{"Nom": null, "nsubj": "obama", "obj": null}	13	4	pVCC
+{"Nom": null, "nsubj": "barack", "obj": null}	9	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "valg"}	9	4	pVCC
+{"Nom": null, "nsubj": "romney", "obj": null}	8	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "kamp"}	5	4	pVCC
+{"Nom": null, "nsubj": "mitt"}	4	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "stat"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "valgmannstemme"}	4	4	pVCC
+{"Nom": null, "nsubj": "lag"}	3	3	pVCC
+{"Nom": null, "nsubj": "obama", "obj": null, "obl=i": "2008"}	3	6	pVCC
+{"Nom": null, "nsubj": null, "obj": "ohio"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "florida"}	2	4	pVCC

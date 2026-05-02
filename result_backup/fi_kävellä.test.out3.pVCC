@@ -1,2 +1,2 @@
-["nsubj", null]	38	1	pVCC
-["nsubj", null, "obl", null]	22	2	pVCC
+{"Nom": null}	38	1	pVCC
+{"Nom": null, "obl": null}	22	2	pVCC

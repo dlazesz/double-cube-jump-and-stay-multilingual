@@ -1,5 +1,6 @@
-["nsubj", null]	124	1	pVCC
-["nsubj", null, "obj", null]	66	2	pVCC
-["nsubj", null, "obj", "rolle"]	18	3	pVCC
-["nsubj", null, "obj", "fotball"]	8	3	pVCC
-["nsubj", null, "obj", "kamp"]	6	3	pVCC
+{"Nom": null, "nsubj": null}	76	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	43	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "rolle"}	13	4	pVCC
+{"Nom": null, "obj": "kamp"}	6	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "fotball"}	5	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "kamp"}	3	4	pVCC

@@ -1,11 +1,15 @@
-["nsubj", null]	52	1	pVCC
-["Loc=o", null, "nsubj", null]	22	2	pVCC
-["Ins=s", null, "nsubj", null]	19	2	pVCC
-["nsubj", null, "obl=v", null]	15	2	pVCC
-["Acc", "se", "Acc=o", null, "nsubj", null]	8	4	pVCC
-["Ins=s", null, "Loc=o", null, "nsubj", null]	8	3	pVCC
-["Loc=o", null, "nsubj", null, "obl=v", null]	8	3	pVCC
-["Ins=s", "ministr", "Loc=o", null, "nsubj", null]	3	4	pVCC
-["Ins=s", null, "Loc=o", null, "nsubj", null, "obl=v", null]	3	4	pVCC
-["Loc=o", "řešení", "nsubj", null]	3	3	pVCC
-["nsubj", "komise"]	3	2	pVCC
+{"Nom": null}	52	1	pVCC
+{"Nom": null, "nsubj": null}	24	2	pVCC
+{"Loc=o": null, "Nom": null}	22	2	pVCC
+{"Ins=s": null, "Nom": null}	19	2	pVCC
+{"Loc=o": null, "Nom": null, "nsubj": null}	11	3	pVCC
+{"Ins=s": null, "Nom": null, "nsubj": null}	10	3	pVCC
+{"Nom": null, "nsubj": null, "obl=v": null}	10	3	pVCC
+{"Acc": "se", "Acc=o": null, "Nom": null}	8	4	pVCC
+{"Ins=s": null, "Loc=o": null, "Nom": null}	8	3	pVCC
+{"Loc=o": null, "Nom": null, "nsubj": null, "obl=v": null}	5	4	pVCC
+{"Ins=s": null, "Nom": null, "nsubj": null, "obl=v": null}	4	4	pVCC
+{"Ins=s": "ministr", "Loc=o": null, "Nom": null}	3	4	pVCC
+{"Loc=o": "řešení", "Nom": null}	3	3	pVCC
+{"Nom": null, "nsubj": "komise"}	3	3	pVCC
+{"Ins=s": null, "Loc=o": null, "Nom": null, "nsubj": null, "obl=v": null}	2	5	pVCC

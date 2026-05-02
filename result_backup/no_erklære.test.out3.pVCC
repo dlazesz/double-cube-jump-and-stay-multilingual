@@ -1,6 +1,6 @@
-["nsubj", null]	37	1	pVCC
-["nsubj", "cnn"]	11	2	pVCC
-["nsubj", null, "obj", null, "xcomp", "vinner"]	10	4	pVCC
-["nsubj", "cnn", "obj", null, "xcomp", "vinner"]	5	5	pVCC
-["nsubj", null, "obj", "obama", "xcomp", "vinner"]	5	5	pVCC
-["nsubj", "nbc"]	4	2	pVCC
+{"Nom": null, "nsubj": null}	33	2	pVCC
+{"Nom": null, "nsubj": "cnn"}	11	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": "vinner"}	10	5	pVCC
+{"Nom": null, "nsubj": "cnn", "obj": null, "xcomp": "vinner"}	5	6	pVCC
+{"Nom": null, "nsubj": null, "obj": "obama", "xcomp": "vinner"}	5	6	pVCC
+{"Nom": null, "nsubj": "nbc"}	4	3	pVCC

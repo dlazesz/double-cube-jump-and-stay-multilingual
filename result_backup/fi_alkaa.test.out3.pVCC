@@ -1,10 +1,10 @@
-["nsubj", null]	184	1	pVCC
-["nsubj", null, "xcomp", null]	102	2	pVCC
-["nsubj", null, "obl", null]	53	2	pVCC
-["nsubj", "mies", "xcomp", null]	4	3	pVCC
-["nsubj", null, "xcomp", "epäillä"]	4	3	pVCC
-["nsubj", "matka"]	3	2	pVCC
-["nsubj", null, "obl", "osa"]	3	3	pVCC
-["nsubj", null, "xcomp", "käyttää"]	3	3	pVCC
-["nsubj", null, "xcomp", "tulla"]	3	3	pVCC
-["nsubj", "sota", "obl", null]	2	3	pVCC
+{"Nom": null, "nsubj": null}	131	2	pVCC
+{"Nom": null, "nsubj": null, "xcomp": null}	69	3	pVCC
+{"Nom": null, "nsubj": null, "obl": null}	37	3	pVCC
+{"Nom": null, "nsubj": "mies", "xcomp": null}	4	4	pVCC
+{"Nom": null, "nsubj": "matka"}	3	3	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "epäillä"}	3	4	pVCC
+{"Nom": null, "nsubj": "sota", "obl": null}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obl": "osa"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "käyttää"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "tulla"}	2	4	pVCC

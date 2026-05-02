@@ -1,9 +1,10 @@
-["nsubj", null]	129	1	pVCC
-["nsubj", null, "obj", null]	47	2	pVCC
-["nsubj", null, "obl=für", null, "obl=in", null]	4	3	pVCC
-["nsubj", "aol", "obj", null]	3	3	pVCC
-["nsubj", null, "obj", "gang"]	3	3	pVCC
-["nsubj", null, "obl=für", "jahr"]	3	3	pVCC
-["nsubj", null, "xcomp=zu", "veröffentlichen"]	3	3	pVCC
-["nsubj", "unternehmen"]	3	2	pVCC
-["nsubj", "apple", "obj", null]	2	3	pVCC
+{"Nom": null}	129	1	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	45	3	pVCC
+{"Nom": null, "obl=für": null, "obl=in": null}	4	3	pVCC
+{"Nom": null, "nsubj": "aol", "obj": null}	3	4	pVCC
+{"Nom": null, "nsubj": "unternehmen"}	3	3	pVCC
+{"Nom": null, "nsubj": null, "obl=in": null, "xcomp=zu": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp=zu": "veröffentlichen"}	3	4	pVCC
+{"Nom": null, "nsubj": "apple", "obj": null}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "gang"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obl=für": "jahr"}	2	4	pVCC

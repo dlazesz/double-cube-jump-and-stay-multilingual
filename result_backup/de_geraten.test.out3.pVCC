@@ -1,3 +1,4 @@
-["nsubj", null]	24	1	pVCC
-["Acc=in", null, "nsubj", null]	10	2	pVCC
-["Acc=in", null, "Nom", null, "nsubj", null]	5	3	pVCC
+{"Nom": null}	24	1	pVCC
+{"Nom": null, "nsubj": null}	11	2	pVCC
+{"Acc=in": null, "Nom": null}	10	2	pVCC
+{"Acc=in": null, "Nom": null, "nsubj": null}	5	3	pVCC

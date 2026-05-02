@@ -1,9 +1,9 @@
-["nsubj", null]	98	1	pVCC
-["nsubj", null, "obj", null]	38	2	pVCC
-["Acc", "sich", "nsubj", null]	8	3	pVCC
-["nsubj", null, "obj", "link"]	4	3	pVCC
-["Acc", "sich", "nsubj", null, "obl=an", "spitze"]	3	5	pVCC
-["nsubj", null, "obj", "hoffnung", "obl=in", null]	3	4	pVCC
-["nsubj", null, "obj", null, "obl=unter", "druck"]	3	4	pVCC
-["nsubj", null, "obl=mit", null, "obl=zu", null]	3	3	pVCC
-["nsubj", "sega"]	3	2	pVCC
+{"Nom": null, "nsubj": null}	73	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	27	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=in": null}	8	4	pVCC
+{"Nom": null, "obj": "link"}	4	3	pVCC
+{"Nom": null, "nsubj": "sega"}	3	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "hoffnung", "obl=in": null}	3	5	pVCC
+{"Nom": null, "obl=mit": null, "obl=zu": null}	3	3	pVCC
+{"Acc": "sich", "Nom": null, "nsubj": null, "obl=an": "spitze"}	2	6	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=unter": "druck"}	2	5	pVCC

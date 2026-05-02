@@ -1,26 +1,26 @@
-["nsubj", null]	179	1	pVCC
-["nsubj", null, "obl=bei", null]	60	2	pVCC
-["nsubj", "preis", "obl=bei", null]	13	3	pVCC
-["nsubj", null, "obl=bei", "dollar"]	12	3	pVCC
-["nsubj", null, "obl=bei", "mark"]	9	3	pVCC
-["nsubj", "preis", "obl=bei", "dollar"]	6	4	pVCC
-["nsubj", "zahl", "obl=bei", null]	6	3	pVCC
-["nsubj", null, "obl=bei", "prozent"]	5	3	pVCC
-["nsubj", "fehler"]	4	2	pVCC
-["nsubj", "preis", "obl=bei", "mark"]	4	4	pVCC
-["nsubj", "iis", "obl=an", "stelle", "obl=mit", null]	3	5	pVCC
-["nsubj", "kurs", "obl=bei", null]	3	3	pVCC
-["nsubj", null, "obl=in", "hand"]	3	3	pVCC
-["nsubj", null, "obl=in", "region"]	3	3	pVCC
-["nsubj", null, "obl=in", "usa"]	3	3	pVCC
-["nsubj", null, "obl=um", "prozent"]	3	3	pVCC
-["nsubj", "zahl", "obl=nach", null]	3	3	pVCC
-["nsubj", "anteil", "obl=bei", "prozent"]	2	4	pVCC
-["nsubj", "aol", "obl=in", "deutschland", "obl=mit", null]	2	5	pVCC
-["nsubj", null, "obl=an", null, "obl=bei", "euro"]	2	4	pVCC
-["nsubj", null, "obl=auf", "platz", "obl=mit", null]	2	4	pVCC
-["nsubj", null, "obl=mit", "mark", "obl=unter", null]	2	4	pVCC
-["nsubj", "problem", "obl=laut", null]	2	3	pVCC
-["nsubj", "rate", "obl=bei", "prozent"]	2	4	pVCC
-["nsubj", "version", "obl=auf", "server"]	2	4	pVCC
-["nsubj", "zahl", "obl", null, "obl=bei", null]	2	4	pVCC
+{"Nom": null, "nsubj": null}	159	2	pVCC
+{"Nom": null, "nsubj": null, "obl=bei": null}	56	3	pVCC
+{"Nom": null, "nsubj": "preis", "obl=bei": null}	13	4	pVCC
+{"Nom": null, "nsubj": null, "obl=bei": "dollar"}	11	4	pVCC
+{"Nom": null, "nsubj": null, "obl=bei": "mark"}	9	4	pVCC
+{"Nom": null, "nsubj": "preis", "obl=bei": "dollar"}	6	5	pVCC
+{"Nom": null, "nsubj": "zahl", "obl=bei": null}	6	4	pVCC
+{"Nom": null, "nsubj": null, "obl=bei": "prozent"}	5	4	pVCC
+{"Nom": null, "nsubj": "fehler"}	4	3	pVCC
+{"Nom": null, "nsubj": "preis", "obl=bei": "mark"}	4	5	pVCC
+{"Nom": null, "nsubj": "iis", "obl=an": "stelle", "obl=mit": null}	3	6	pVCC
+{"Nom": null, "nsubj": "kurs", "obl=bei": null}	3	4	pVCC
+{"Nom": null, "nsubj": "zahl", "obl=nach": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "region"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "usa"}	3	4	pVCC
+{"Nom": null, "obl=um": "prozent"}	3	3	pVCC
+{"Nom": null, "nsubj": "anteil", "obl=bei": "prozent"}	2	5	pVCC
+{"Nom": null, "nsubj": "aol", "obl=in": "deutschland", "obl=mit": null}	2	6	pVCC
+{"Nom": null, "nsubj": "problem", "obl=laut": null}	2	4	pVCC
+{"Nom": null, "nsubj": "rate", "obl=bei": "prozent"}	2	5	pVCC
+{"Nom": null, "nsubj": "version", "obl=auf": "server"}	2	5	pVCC
+{"Nom": null, "nsubj": "zahl", "obl": null, "obl=bei": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "hand"}	2	4	pVCC
+{"Nom": null, "nsubj": null, "obl=mit": "mark", "obl=unter": null}	2	5	pVCC
+{"Nom": null, "obl=an": null, "obl=bei": "euro"}	2	4	pVCC
+{"Nom": null, "obl=auf": "platz", "obl=mit": null}	2	4	pVCC

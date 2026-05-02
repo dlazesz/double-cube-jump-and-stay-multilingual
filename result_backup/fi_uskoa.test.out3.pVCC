@@ -1,5 +1,7 @@
-["nsubj", null]	50	1	pVCC
-["Gen", null, "nsubj", null]	17	2	pVCC
-["nsubj", "prosentti"]	6	2	pVCC
-["Gen", "tulla", "nsubj", null]	3	3	pVCC
-["nsubj", "sijoittaja"]	3	2	pVCC
+{"Nom": null}	50	1	pVCC
+{"Nom": null, "nsubj": null}	27	2	pVCC
+{"Gen": null, "Nom": null}	17	2	pVCC
+{"Gen": null, "Nom": null, "nsubj": null}	10	3	pVCC
+{"Nom": null, "nsubj": "prosentti"}	6	3	pVCC
+{"Gen": "tulla", "Nom": null, "nsubj": null}	3	4	pVCC
+{"Nom": null, "nsubj": "sijoittaja"}	3	3	pVCC

@@ -1,27 +1,27 @@
-["nsubj", null, "obj", null]	118	2	pVCC
-["nsubj", null, "obj", null, "obl=auf", null]	37	3	pVCC
-["nsubj", null, "obj", "version"]	13	3	pVCC
-["Dat", "sich", "nsubj", null]	7	3	pVCC
-["nsubj", null, "obj", "modell"]	7	3	pVCC
-["nsubj", "apple", "obj", null]	6	3	pVCC
-["nsubj", null, "obj", "system"]	6	3	pVCC
-["nsubj", "sun", "obj", null]	6	3	pVCC
-["nsubj", null, "obj", null, "obl=auf", "cebit"]	5	4	pVCC
-["nsubj", "hersteller", "obj", null, "obl=auf", null]	4	4	pVCC
-["nsubj", null, "obj", null, "obl=auf", "konferenz"]	4	4	pVCC
-["Dat", "sich", "nsubj", null, "obj", null]	3	4	pVCC
-["Dat", "sich", "nsubj", null, "xcomp=zu", null]	3	4	pVCC
-["nsubj", null, "obj", "chipsatz"]	3	3	pVCC
-["nsubj", null, "obj", null, "obl=auf", "macworld"]	3	4	pVCC
-["nsubj", null, "obj", "version", "obl=auf", null]	3	4	pVCC
-["nsubj", null, "obl=in", "version"]	3	3	pVCC
-["nsubj", "sun", "obj", "server"]	3	4	pVCC
-["nsubj", "sun", "obj", "system"]	3	4	pVCC
-["nsubj", "unknown", "obj", null]	3	3	pVCC
-["iobj", "öffentlichkeit", "nsubj", null, "obj", null, "obl=in", null]	2	5	pVCC
-["nsubj", "amd", "obj", null, "obl=auf", "comdex"]	2	5	pVCC
-["nsubj", "intel", "obj", null, "obl=nach", null]	2	4	pVCC
-["nsubj", "microsoft", "obj", null, "obl=in", null]	2	4	pVCC
-["nsubj", null, "obj", null, "obl=auf", "microprocessor", "obl=in", "san"]	2	6	pVCC
-["nsubj", "steve", "obj", "modell", "obl=zu", "macworld"]	2	6	pVCC
-["nsubj", "unternehmen", "obj", null, "obl=auf", null]	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	116	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": null}	37	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "version"}	13	4	pVCC
+{"Dat": "sich", "Nom": null, "nsubj": null}	7	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "modell"}	7	4	pVCC
+{"Nom": null, "nsubj": "apple", "obj": null}	6	4	pVCC
+{"Nom": null, "nsubj": "sun", "obj": null}	6	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "system"}	6	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "cebit"}	5	5	pVCC
+{"Nom": null, "nsubj": "hersteller", "obj": null, "obl=auf": null}	4	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "konferenz"}	4	5	pVCC
+{"Dat": "sich", "Nom": null, "nsubj": null, "obj": null}	3	5	pVCC
+{"Dat": "sich", "Nom": null, "nsubj": null, "xcomp=zu": null}	3	5	pVCC
+{"Nom": null, "nsubj": "sun", "obj": "server"}	3	5	pVCC
+{"Nom": null, "nsubj": "sun", "obj": "system"}	3	5	pVCC
+{"Nom": null, "nsubj": "unknown", "obj": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "chipsatz"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "version", "obl=auf": null}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "macworld"}	3	5	pVCC
+{"Nom": null, "iobj": "öffentlichkeit", "nsubj": null, "obj": null, "obl=in": null}	2	6	pVCC
+{"Nom": null, "nsubj": "amd", "obj": null, "obl=auf": "comdex"}	2	6	pVCC
+{"Nom": null, "nsubj": "intel", "obj": null, "obl=nach": null}	2	5	pVCC
+{"Nom": null, "nsubj": "microsoft", "obj": null, "obl=in": null}	2	5	pVCC
+{"Nom": null, "nsubj": "steve", "obj": "modell", "obl=zu": "macworld"}	2	7	pVCC
+{"Nom": null, "nsubj": "unternehmen", "obj": null, "obl=auf": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=auf": "microprocessor", "obl=in": "san"}	2	7	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "version"}	2	4	pVCC

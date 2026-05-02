@@ -1,12 +1,15 @@
-["nsubj", null, "xcomp", null]	97	2	pVCC
-["nsubj", null, "obj", null, "xcomp", null]	32	3	pVCC
-["nsubj", "nit", "xcomp", null]	4	3	pVCC
-["nsubj", null, "xcomp", "am"]	4	3	pVCC
-["nsubj", null, "xcomp", "jàpp"]	4	3	pVCC
-["nsubj", null, "xcomp", "jur"]	4	3	pVCC
-["nsubj", null, "xcomp", "wax"]	4	3	pVCC
-["nsubj", "jabet", "xcomp", null]	3	3	pVCC
-["nsubj", null, "xcomp", "gis"]	3	3	pVCC
-["nsubj", null, "xcomp", "jëli"]	3	3	pVCC
-["nsubj", null, "xcomp", "jëriñoo"]	3	3	pVCC
-["nsubj", null, "xcomp", "ñàkk"]	3	3	pVCC
+{"Nom": null, "xcomp": null}	97	2	pVCC
+{"Nom": null, "nsubj": null, "xcomp": null}	52	3	pVCC
+{"Nom": null, "obj": null, "xcomp": null}	32	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": null}	16	4	pVCC
+{"Nom": null, "nsubj": "nit", "xcomp": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "jàpp"}	4	4	pVCC
+{"Nom": null, "xcomp": "am"}	4	3	pVCC
+{"Nom": null, "xcomp": "jur"}	4	3	pVCC
+{"Nom": null, "nsubj": "jabet", "xcomp": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "jëriñoo"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "wax"}	3	4	pVCC
+{"Nom": null, "obj": null, "xcomp": "xañ"}	3	4	pVCC
+{"Nom": null, "xcomp": "gis"}	3	3	pVCC
+{"Nom": null, "xcomp": "jëli"}	3	3	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "ñàkk"}	2	4	pVCC

@@ -1,14 +1,14 @@
-["nsubj", null]	183	1	pVCC
-["nsubj", "sprecher"]	19	2	pVCC
-["nsubj", "chef"]	6	2	pVCC
-["nsubj", null, "obl=in", "gespräch"]	5	3	pVCC
-["nsubj", "schmid"]	5	2	pVCC
-["nsubj", "sprecher", "obl=in", null]	5	3	pVCC
-["nsubj", "geschäftsführer"]	4	2	pVCC
-["nsubj", null, "obl=an", "mittwoch"]	4	3	pVCC
-["nsubj", null, "obl=gegenüber", "heise"]	4	3	pVCC
-["nsubj", "sprecherin"]	4	2	pVCC
-["nsubj", "unknown"]	4	2	pVCC
-["nsubj", "vorsitzend"]	4	2	pVCC
-["nsubj", null, "obl=an", "mittwoch", "obl=in", null]	2	4	pVCC
-["nsubj", null, "obl=bei", "konferenz"]	2	3	pVCC
+{"Nom": null, "nsubj": null}	179	2	pVCC
+{"Nom": null, "nsubj": "sprecher"}	19	3	pVCC
+{"Nom": null, "nsubj": "chef"}	6	3	pVCC
+{"Nom": null, "nsubj": "schmid"}	5	3	pVCC
+{"Nom": null, "nsubj": "sprecher", "obl=in": null}	5	4	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "gespräch"}	5	4	pVCC
+{"Nom": null, "nsubj": "geschäftsführer"}	4	3	pVCC
+{"Nom": null, "nsubj": "sprecherin"}	4	3	pVCC
+{"Nom": null, "nsubj": "unknown"}	4	3	pVCC
+{"Nom": null, "nsubj": "vorsitzend"}	4	3	pVCC
+{"Nom": null, "nsubj": null, "obl=an": "mittwoch"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obl=gegenüber": "heise"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obl=an": "mittwoch", "obl=in": null}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obl=bei": "konferenz"}	2	4	pVCC

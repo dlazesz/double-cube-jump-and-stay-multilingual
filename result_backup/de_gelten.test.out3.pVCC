@@ -1,6 +1,7 @@
-["nsubj", null]	75	1	pVCC
-["nsubj", null, "obl=für", null]	28	2	pVCC
-["nsubj", null, "obl=als", null]	21	2	pVCC
-["nsubj", "recht"]	5	2	pVCC
-["nsubj", "angebot"]	4	2	pVCC
-["nsubj", "gesetz"]	3	2	pVCC
+{"Nom": null, "nsubj": null}	68	2	pVCC
+{"Nom": null, "nsubj": null, "obl=für": null}	26	3	pVCC
+{"Nom": null, "nsubj": null, "obl=als": null}	20	3	pVCC
+{"Nom": null, "nsubj": "recht"}	5	3	pVCC
+{"Nom": null, "nsubj": null, "obl=als": null, "obl=in": null}	5	4	pVCC
+{"Nom": null, "nsubj": "angebot"}	4	3	pVCC
+{"Nom": null, "nsubj": "gesetz"}	3	3	pVCC

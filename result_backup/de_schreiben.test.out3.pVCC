@@ -1,8 +1,5 @@
-["nsubj", null]	45	1	pVCC
-["nsubj", null, "obj", null]	23	2	pVCC
-["nsubj", null, "obl=auf", null]	12	2	pVCC
-["nsubj", null, "obj", null, "obl=auf", null]	7	3	pVCC
-["nsubj", null, "obj", null, "obl=auf", "festplatte"]	3	4	pVCC
-["nsubj", null, "obj", "zahl"]	3	3	pVCC
-["iobj", "sich", "nsubj", null, "obj", null, "obl=auf", "fahne"]	2	6	pVCC
-["Nom", null, "nsubj", null, "obl=in", "java"]	2	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	19	3	pVCC
+{"Nom": null, "obl=auf": null}	12	2	pVCC
+{"Nom": null, "nsubj": null, "obj": "zahl"}	3	4	pVCC
+{"Nom": null, "obj": null, "obl=auf": "festplatte"}	3	4	pVCC
+{"Nom": null, "iobj": "sich", "nsubj": null, "obj": null, "obl=auf": "fahne"}	2	7	pVCC

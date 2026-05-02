@@ -1,9 +1,11 @@
-["nsubj", null, "obj", null]	168	2	pVCC
-["nsubj", null, "obj", "solo"]	17	3	pVCC
-["nsubj", "nit", "obj", "sañ-sañ"]	15	4	pVCC
-["nsubj", null, "obj", "at"]	6	3	pVCC
-["nsubj", null, "obj", "solo", "obl=ci", null]	5	4	pVCC
-["nsubj", null, "obj", null, "obl", "ci"]	4	4	pVCC
-["nsubj", null, "obj", "weer"]	3	3	pVCC
-["nsubj", null, "obj", "kàttan", "xcomp=ci", null]	2	4	pVCC
-["nsubj", null, "obj", "sañ-sañ", "obl=ci", "réew"]	2	5	pVCC
+{"Nom": null, "obj": null}	168	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	84	3	pVCC
+{"Nom": null, "nsubj": "nit", "obj": "sañ-sañ"}	15	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "solo"}	11	4	pVCC
+{"Nom": null, "obj": "at"}	6	3	pVCC
+{"Nom": null, "obj": "jabet"}	4	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "solo", "obl=ci": null}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "weer"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl": "ci"}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "kàttan", "xcomp=ci": null}	2	5	pVCC
+{"Nom": null, "obj": "sañ-sañ", "obl=ci": "réew"}	2	5	pVCC

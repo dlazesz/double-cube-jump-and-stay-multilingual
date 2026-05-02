@@ -1,0 +1,9 @@
+{"Nom": null, "nsubj": null, "obj": null}	107	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": null}	57	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": "geweldig"}	6	5	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "leuk"}	6	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": "belangrijk"}	5	5	pVCC
+{"Nom": null, "nsubj": "procent", "obj": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "weg"}	4	4	pVCC
+{"Nom": null, "nsubj": "dr."}	3	3	pVCC
+{"Nom": null, "nsubj": "heer"}	3	3	pVCC

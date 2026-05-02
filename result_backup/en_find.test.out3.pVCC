@@ -1,9 +1,11 @@
-["nsubj", null, "obj", null]	142	2	pVCC
-["nsubj", null, "obj", "hotel"]	7	3	pVCC
-["nsubj", null, "obj", null, "xcomp", "attach"]	7	4	pVCC
-["nsubj", null, "obj", "hotel", "obl=in", null]	4	4	pVCC
-["nsubj", null, "obj", null, "xcomp", "helpful"]	4	4	pVCC
-["nsubj", null, "obj", "yourself"]	4	3	pVCC
-["nsubj", null, "obj", null, "obl=on", "map"]	3	4	pVCC
-["nsubj", null, "obj", "way"]	3	3	pVCC
-["nsubj", null, "obj", "hotel", "obl=for", "rs", "obl=in", null]	2	6	pVCC
+{"Nom": null, "obj": null}	142	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	76	3	pVCC
+{"Nom": null, "obj": "hotel"}	7	3	pVCC
+{"Nom": null, "obj": null, "xcomp": "attach"}	7	4	pVCC
+{"Nom": null, "obj": "place"}	5	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "yourself"}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "hotel", "obl=in": null}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=on": "map"}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": "helpful"}	3	5	pVCC
+{"Nom": null, "nsubj": null, "obj": "way"}	2	4	pVCC
+{"Nom": null, "obj": "hotel", "obl=for": "rs", "obl=in": null}	2	6	pVCC

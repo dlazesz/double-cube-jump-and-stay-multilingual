@@ -1,3 +1,3 @@
-["nsubj", null]	23	1	pVCC
-["Acc=auf", null, "nsubj", null]	11	2	pVCC
-["nsubj", "microsoft"]	3	2	pVCC
+{"Nom": null, "nsubj": null}	19	2	pVCC
+{"Acc=auf": null, "Nom": null, "nsubj": null}	8	3	pVCC
+{"Nom": null, "nsubj": "microsoft"}	3	3	pVCC

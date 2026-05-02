@@ -1,9 +1,9 @@
-["nsubj", null]	86	1	pVCC
-["nsubj", null, "obl=in", "ausgabe"]	11	3	pVCC
-["nsubj", "magazin"]	8	2	pVCC
-["nsubj", "wall"]	6	2	pVCC
-["nsubj", "c't", "obl=in", "ausgabe"]	4	4	pVCC
-["nsubj", "spiegel"]	4	2	pVCC
-["nsubj", "telepolis"]	4	2	pVCC
-["Acc=über", null, "nsubj", "magazin"]	3	3	pVCC
-["nsubj", null, "obj", null, "obl=unter", "berufung"]	2	4	pVCC
+{"Nom": null, "nsubj": null}	78	2	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "ausgabe"}	11	4	pVCC
+{"Nom": null, "nsubj": "magazin"}	8	3	pVCC
+{"Nom": null, "nsubj": "wall"}	6	3	pVCC
+{"Nom": null, "nsubj": "c't", "obl=in": "ausgabe"}	4	5	pVCC
+{"Nom": null, "nsubj": "spiegel"}	4	3	pVCC
+{"Nom": null, "nsubj": "telepolis"}	4	3	pVCC
+{"Acc=über": null, "Nom": null, "nsubj": "magazin"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=unter": "berufung"}	2	5	pVCC

@@ -1,16 +1,15 @@
-["nsubj", null, "obj", "sich", "xcomp", null]	230	4	pVCC
-["nsubj", null, "xcomp", "verlauten"]	8	3	pVCC
-["nsubj", null, "xcomp", "warten"]	8	3	pVCC
-["nsubj", null, "xcomp", "registrieren"]	7	3	pVCC
-["nsubj", null, "obj", null, "xcomp", "abstürzen"]	4	4	pVCC
-["nsubj", null, "obj", null, "xcomp", "fallen"]	4	4	pVCC
-["nsubj", null, "xcomp", "brennen"]	4	3	pVCC
-["nsubj", "firma", "xcomp", null]	3	3	pVCC
-["nsubj", null, "xcomp", "anzeigen"]	3	3	pVCC
-["nsubj", null, "xcomp", "vorlesen"]	3	3	pVCC
-["nsubj", "programm", "xcomp", null]	3	3	pVCC
-["iobj", "sich", "nsubj", null, "obj", "zeit"]	2	5	pVCC
-["nsubj", null, "obj", null, "obl=mit", null, "xcomp", "entfernen"]	2	5	pVCC
-["nsubj", null, "obj", null, "xcomp", "offen"]	2	4	pVCC
-["nsubj", null, "obj", null, "xcomp", "überprüfen"]	2	4	pVCC
-["nsubj", "qualität", "obj", "sich", "xcomp", "verbessern"]	2	6	pVCC
+{"Nom": null, "nsubj": null, "obj": "sich", "xcomp": null}	214	5	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "warten"}	8	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "verlauten"}	7	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "registrieren"}	6	4	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": "fallen"}	4	5	pVCC
+{"Nom": null, "obj": null, "xcomp": "abstürzen"}	4	4	pVCC
+{"Nom": null, "nsubj": "firma", "xcomp": null}	3	4	pVCC
+{"Nom": null, "nsubj": "programm", "xcomp": null}	3	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "anzeigen"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "xcomp": "vorlesen"}	3	4	pVCC
+{"Nom": null, "iobj": "sich", "nsubj": null, "obj": "zeit"}	2	6	pVCC
+{"Nom": null, "nsubj": "qualität", "obj": "sich", "xcomp": "verbessern"}	2	7	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": "offen"}	2	5	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": "überprüfen"}	2	5	pVCC
+{"Nom": null, "obj": null, "obl=mit": null, "xcomp": "entfernen"}	2	5	pVCC

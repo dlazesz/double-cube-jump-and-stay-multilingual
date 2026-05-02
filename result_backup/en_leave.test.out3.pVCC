@@ -1,6 +1,8 @@
-["nsubj", null, "obj", null]	84	2	pVCC
-["nsubj", null, "obj", "egg"]	5	3	pVCC
-["nsubj", null, "obj", "nail"]	5	3	pVCC
-["nsubj", null, "obj", "message"]	4	3	pVCC
-["nsubj", null, "obj", "lot"]	3	3	pVCC
-["nsubj", null, "xcomp", "open"]	3	3	pVCC
+{"Nom": null, "obj": null}	84	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	49	3	pVCC
+{"Nom": null, "obj": "nail"}	5	3	pVCC
+{"Nom": null, "obj": "message"}	4	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "egg"}	3	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "lot"}	3	4	pVCC
+{"Nom": null, "xcomp": "open"}	3	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "obl=at": null, "obl=with": null}	2	5	pVCC

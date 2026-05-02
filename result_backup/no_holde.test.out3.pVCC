@@ -1,6 +1,9 @@
-["nsubj", null, "obj", null]	84	2	pVCC
-["nsubj", null, "obj", "seg"]	16	3	pVCC
-["nsubj", null, "obj", "seg", "xcomp", null]	5	4	pVCC
-["nsubj", null, "obj", "seg", "obl=i", null]	4	4	pVCC
-["nsubj", null, "obj", "kjeft"]	3	3	pVCC
-["nsubj", null, "obj", "tale"]	3	3	pVCC
+{"Nom": null, "obj": null}	84	2	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	46	3	pVCC
+{"Nom": null, "obj": "seg"}	16	3	pVCC
+{"Nom": null, "nsubj": null, "obj": "seg"}	9	4	pVCC
+{"Nom": null, "obj": "seg", "xcomp": null}	5	4	pVCC
+{"Nom": null, "obj": "seg", "obl=i": null}	4	4	pVCC
+{"Nom": null, "nsubj": null, "obj": "tale"}	3	4	pVCC
+{"Nom": null, "obj": "kjeft"}	3	3	pVCC
+{"Nom": null, "nsubj": "folk", "obl=med": null}	2	4	pVCC

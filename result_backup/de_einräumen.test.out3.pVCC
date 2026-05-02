@@ -1,3 +1,4 @@
-["iobj", null, "nsubj", null, "obj", null]	14	3	pVCC
-["iobj", "behörde", "nsubj", null, "obj", "befugnis"]	2	5	pVCC
-["nsubj", null, "obl=gegenüber", "c't"]	2	3	pVCC
+{"Nom": null, "nsubj": null}	27	2	pVCC
+{"Nom": null, "iobj": null, "nsubj": null, "obj": null}	11	4	pVCC
+{"Nom": null, "iobj": "behörde", "nsubj": null, "obj": "befugnis"}	2	6	pVCC
+{"Nom": null, "nsubj": null, "obl=gegenüber": "c't"}	2	4	pVCC

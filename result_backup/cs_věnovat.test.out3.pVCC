@@ -1,5 +1,8 @@
-["nsubj", null, "obj", null]	33	2	pVCC
-["Acc", "se", "nsubj", null, "obj", null]	15	4	pVCC
-["iobj", null, "nsubj", null, "obj", null]	15	3	pVCC
-["iobj", null, "nsubj", null, "obj", "pozornost"]	7	4	pVCC
-["iobj", null, "nsubj", null, "obj", "úsilí"]	2	4	pVCC
+{"Nom": null, "obj": null}	33	2	pVCC
+{"Acc": "se", "Nom": null, "obj": null}	15	4	pVCC
+{"Nom": null, "iobj": null, "obj": null}	15	3	pVCC
+{"Nom": null, "iobj": null, "nsubj": null, "obj": null}	7	4	pVCC
+{"Nom": null, "iobj": null, "obj": "pozornost"}	7	4	pVCC
+{"Acc": "se", "Nom": null, "nsubj": null, "obj": null}	4	5	pVCC
+{"Nom": null, "iobj": null, "nsubj": null, "obj": "pozornost"}	3	5	pVCC
+{"Nom": null, "iobj": null, "obj": "úsilí"}	2	4	pVCC

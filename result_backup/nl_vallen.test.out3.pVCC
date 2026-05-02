@@ -1,5 +1,6 @@
-["nsubj", null]	87	1	pVCC
-["iobj", null, "nsubj", null, "xcomp", null]	4	3	pVCC
-["nsubj", "kabinet"]	4	2	pVCC
-["nsubj", null, "obl=in", "jaar"]	3	3	pVCC
-["nsubj", "flo", "obl=op", null]	2	3	pVCC
+{"Nom": null, "nsubj": null}	53	2	pVCC
+{"Nom": null, "iobj": null, "xcomp": null}	4	3	pVCC
+{"Nom": null, "nsubj": "kabinet"}	4	3	pVCC
+{"Nom": null, "nsubj": null, "obl=in": "jaar"}	3	4	pVCC
+{"Nom": null, "iobj": null, "nsubj": null, "xcomp": null}	2	4	pVCC
+{"Nom": null, "nsubj": "flo", "obl=op": null}	2	4	pVCC

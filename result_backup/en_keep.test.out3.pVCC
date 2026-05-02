@@ -1,6 +1,10 @@
-["nsubj", null, "obj", null]	93	2	pVCC
-["nsubj", null, "obj", null, "xcomp", null]	43	3	pVCC
-["nsubj", null, "obl=in", "mind"]	6	3	pVCC
-["nsubj", null, "obj", "eye"]	4	3	pVCC
-["nsubj", null, "obj", null, "xcomp", "open"]	3	4	pVCC
-["nsubj", null, "obj", "cage", "xcomp", null]	2	4	pVCC
+{"Nom": null, "obj": null}	93	2	pVCC
+{"Nom": null, "obj": null, "xcomp": null}	43	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null}	29	3	pVCC
+{"Nom": null, "nsubj": null, "xcomp": null}	21	3	pVCC
+{"Nom": null, "nsubj": null, "obj": null, "xcomp": null}	11	4	pVCC
+{"Nom": null, "obl=in": "mind"}	6	3	pVCC
+{"Nom": null, "obj": "eye"}	4	3	pVCC
+{"Nom": null, "xcomp": "try"}	4	3	pVCC
+{"Nom": null, "obj": null, "xcomp": "open"}	3	4	pVCC
+{"Nom": null, "obj": "cage", "xcomp": null}	2	4	pVCC
