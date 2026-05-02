@@ -38,17 +38,10 @@ def parse_args():
         help="Above this value: backward=jump (if omitting last filler) (default: 1e8)"
     )
 
-    parser.add_argument(
-        "--subject_slot",
-        type=str,
-        required=True,
-        help="Subject slot"
-    )
-
     return parser.parse_args()
 
 
-def process_input(inp_fh, subject_slot):
+def process_input(inp_fh):
     for line in inp_fh:
         try:
             d: dict[str, str | None] = json.loads(line)
@@ -58,12 +51,6 @@ def process_input(inp_fh, subject_slot):
 
         d.pop('stem', None)  # Input is is already grouped by the verb stem
         freq = d.pop('freq', None)
-
-        # Adding subjects -- hack, because Hungarian is pro-drop
-        # = if there is no subject_slot => add subject_slot:None
-        # if 'nsubj' not in d or 'Nom' not in d: TODO which?
-        if subject_slot not in d:  # TODO move to CoNLL processing
-            d[subject_slot] = None
 
         yield d, freq
 
@@ -94,14 +81,14 @@ def build_dc_recursively(d, d_json, freq, vertices_freq, vertices_len, edges_bac
             build_dc_recursively(e, e_json, freq, vertices_freq, vertices_len, edges_backward, edges_forward, visited)
 
 
-def build_corpus_lattice(subject_slot):
+def build_corpus_lattice(inp_fh):
     # Corpus lattice
     cl_vertices_freq = Counter()  # Freq of vertices
     cl_vertices_len = {}  # Length of VCCs at vertices
     cl_edges_backward = defaultdict(set)  # Backward edges (= "in"-edges) down in corpus lattice
     cl_edges_forward = defaultdict(set)  # Forward edges (= "out"-edges) up in corpus lattice
 
-    for line, freq in process_input(sys.stdin, subject_slot):
+    for line, freq in process_input(inp_fh):
         d = dict(sorted(line.items()))
         d_json = json.dumps(d, ensure_ascii=False)  # vcc: dict format -> string format (= key!)
 
@@ -123,7 +110,7 @@ def main():
     jump3 = args.jump3
 
     # -- Build the corpus lattice
-    cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward = build_corpus_lattice(args.subject_slot)
+    cl_vertices_freq, cl_vertices_len, cl_edges_backward, cl_edges_forward = build_corpus_lattice(sys.stdin)
 
     # Take all vertices and filter out which is not needed
     pvccs = Counter()

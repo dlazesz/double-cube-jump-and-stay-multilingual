@@ -282,9 +282,14 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
             elif ext[DEPREL] in VERB_PARTICLE:
                 verb_lemma = ext[LEMMA] + verb_lemma
 
-        # handle special 'perverb+verb' format in UD/hu -> delete the '+'
+        # Handle special 'perverb+verb' format in UD/hu -> delete the '+'
         verb_lemma = verb_lemma.replace('+', '')
 
+        # TODO Find a better place for this
+        # Adding subjects -- hack, because Hungarian is pro-drop
+        # = if there is no subject_slot => add subject_slot:None
+        if all(not e.startswith('Nom@@') for e in exts):
+            exts.append('Nom@@NULL')
         print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, logger)
 
 

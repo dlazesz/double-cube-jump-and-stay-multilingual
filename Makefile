@@ -2,7 +2,6 @@
 INPUT=??
 
 ORIG=_ORIG
-SUBJECT_SLOT=Nom
 
 all: full
 
@@ -35,7 +34,7 @@ jands:
 	@echo
 	mkdir -p result
 	rm -f result/$(INPUT)_*out3*
-	for V in `ls json/$(INPUT)_*.test.json | sed "s/.*\///;s/\.test\.json//"`; do echo "--- $$V" ; ln json/$$V.test.json . ; make -f Makefile.jands VERB=$$V SUBJECT_SLOT=$(SUBJECT_SLOT) test ; rm -f $$V.test.json ; mv $$V.test.out3* result ; done > jands.out 2> jands.err
+	for f in json/$(INPUT)_*.test.json; do V="$${f##*/}"; V=$${V%.test.json}; echo "--- $$V" ; ln $$f . ; make -f Makefile.jands VERB=$$V test ; rm -f $$V.test.json ; mv $$V.test.out3* result ; done > jands.out 2> jands.err
 
 jands_diff:
 	diffrvi result$(ORIG) result

@@ -1,16 +1,14 @@
 
-SUBJECT_SLOT=nsubj
-
 all:
 	make VERB=hagy train
 	make VERB=huz test
 	make VERB=vet test
 
 train:
-	cat $(VERB).train.json | python3 impl.py --subject_slot $(SUBJECT_SLOT) 2> $(VERB).train.out3 > $(VERB).train.out3.pVCC
+	cat $(VERB).train.json | python3 impl.py 2> $(VERB).train.out3 > $(VERB).train.out3.pVCC
 
 test:
-	cat $(VERB).test.json | python3 impl.py --subject_slot $(SUBJECT_SLOT) 2> $(VERB).test.out3 > $(VERB).test.out3.pVCC
+	cat $(VERB).test.json | python3 impl.py 2> $(VERB).test.out3 > $(VERB).test.out3.pVCC
 
 diff:
 	diff hagy.train.out3.pVCC_orig hagy.train.out3.pVCC
