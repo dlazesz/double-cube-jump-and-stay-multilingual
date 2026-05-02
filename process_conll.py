@@ -216,10 +216,13 @@ def build_index_for_sentence(sentence, logger):
 
 
 def process_sentence(sentence, inputlang, include_unknown_slots, output_format, logfile, logger: Logger):
-    children, by_id, roots = build_index_for_sentence(sentence, logger)  # TODO this make things slower, revert it!
-
     xcomp_particle = XCOMP_PARTICLE.get(inputlang)
-    for root in roots:
+    for root in sentence:
+        logger.debug(' '.join(root[ID:DEPS]))
+
+        if root[UPOS] != ROOT_UPOS:
+            continue
+
         verb_lemma = root[LEMMA]  # We have the root (=VERB) here
 
         exts = []
@@ -236,7 +239,10 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
         #        exts.append(f'{feat}@@{root[FEATS_DIC][feat]}')
 
         # Exts of the verb -- with simple loops (not slow)
-        for ext in children[root[ID]]:  # Direct exts
+        for ext in sentence:  # Direct exts
+            if ext[HEAD] != root[ID]:
+                continue
+
             if ext[SLOT] != NOSLOT:
                 slot = ext[SLOT]
 
@@ -245,7 +251,10 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
                 #    exts.append(slot + '/number@@' + ext[FEATS_DIC]['Number'])
 
                 # Exts of the exts = amend slot with prepositions/postpositions
-                for extofext in children[ext[ID]]:
+                for extofext in sentence:
+                    if extofext[HEAD] != ext[ID]:
+                        continue
+
                     if (extofext[UPOS] == 'ADP' or (
                             extofext[UPOS] == 'PART' and
                             xcomp_particle is not None and
