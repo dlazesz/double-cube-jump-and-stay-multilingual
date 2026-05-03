@@ -17,7 +17,8 @@ BASE=$(basename "$INPUTFILE")
 O1=${BASE}.verbose
 O2=${BASE}
 
-# Output in JSON, make a freqlist, and put freq value into the JSON
-python3 ./process_conll.py --input-file "$INPUTFILE" --language "$INPUTLANG" --logfile "$ODIR/$O1" -f JSON \
- | sort | uniq -c | sort -nr | awk '{$3 = $1","; for (i = 1; i < NF; i++) {$i = $(i+1)}; NF--; print}' > "$ODIR/$O2"
-
+# Output in JSON, group by to get freqs and collect span values for each entry
+python3 ./process_conll.py --input-file "$INPUTFILE" --language "$INPUTLANG" --logfile "$ODIR/$O1" -f JSON | \
+  jq -sc 'sort_by(del(.span)) | group_by(del(.span)) | map(.[0] + {freq: length}) | sort_by(-.freq) | .[]' | \
+  python3 -c "import sys, json; [print(json.dumps(json.loads(line), indent=None, ensure_ascii=False)) for line in sys.stdin]" \
+  > "$ODIR/$O2"

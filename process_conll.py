@@ -12,7 +12,6 @@ import logging
 import argparse
 import fileinput
 from logging import Logger
-from collections import defaultdict
 from typing import Any
 
 # CoNLL fields -- last two added by this module
@@ -197,34 +196,16 @@ def print_vcc(verb_lemma, exts, span, include_unknown_slots, output_format, logf
         raise NotImplementedError(f'Unknown output format: {output_format}')
 
 
-def build_index_for_sentence(sentence, logger):
-    children = defaultdict(list)
-    by_id = {}
-    roots = []
-
-    for tok in sentence:
-        tok_id = tok[ID]
-        head = tok[HEAD]
-        by_id[tok_id] = tok
-        children[head].append(tok)
-        logger.debug(' '.join(tok[ID:DEPS]))
-
-        if tok[UPOS] == ROOT_UPOS:
-            roots.append(tok)
-
-    return children, by_id, roots
-
-
 def process_sentence(sentence, inputlang, include_unknown_slots, output_format, logfile, logger: Logger):
     xcomp_particle = XCOMP_PARTICLE.get(inputlang)
     span_ids = []
-    for root in sentence:
+    for ri, root in enumerate(sentence, start=1):
         logger.debug(' '.join(root[ID:DEPS]))
 
         if root[UPOS] != ROOT_UPOS:
             continue
 
-        span_ids.append(int(root[ID]))  # Track root ID
+        span_ids.append(ri)  # Track root index
         verb_lemma = root[LEMMA]  # We have the root (=VERB) here
 
         exts = []
@@ -241,11 +222,11 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
         #        exts.append(f'{feat}@@{root[FEATS_DIC][feat]}')
 
         # Exts of the verb -- with simple loops (not slow)
-        for ext in sentence:  # Direct exts
+        for ei, ext in enumerate(sentence, start=1):  # Direct exts
             if ext[HEAD] != root[ID]:
                 continue
 
-            span_ids.append(int(ext[ID]))  # Track ext ID
+            span_ids.append(ei)  # Track ext index
 
             if ext[SLOT] != NOSLOT:
                 slot = ext[SLOT]
@@ -255,7 +236,7 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
                 #    exts.append(slot + '/number@@' + ext[FEATS_DIC]['Number'])
 
                 # Exts of the exts = amend slot with prepositions/postpositions
-                for extofext in sentence:
+                for eei, extofext in enumerate(sentence, start=1):
                     if extofext[HEAD] != ext[ID]:
                         continue
 
@@ -264,7 +245,7 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
                             xcomp_particle is not None and
                             extofext[LEMMA] == xcomp_particle
                     )):
-                        span_ids.append(int(extofext[ID]))  # Track child ID
+                        span_ids.append(eei)  # Track child index
                         prep = extofext[LEMMA].lower()
                         # 'de': handle german contractions: am -> an
                         if inputlang == 'de' and prep in DE_CONTRACTIONS:
