@@ -51,6 +51,7 @@ def process_input(inp_fh):
 
         d.pop('stem', None)  # Input is is already grouped by the verb stem
         freq = d.pop('freq', None)
+        d.pop('span', None)  # The span of tokens from the dep tree fragment
 
         yield d, freq
 

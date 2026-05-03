@@ -160,7 +160,7 @@ def parse_feats_dict(feats: str, row):
     return feats_dic
 
 
-def print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, logger):
+def print_vcc(verb_lemma, exts, span, include_unknown_slots, output_format, logfile, logger):
     """Print out the verb centered construction = verb + exts (in alphabetical order)"""
     exts_out = ''
     ext_out_w_unknown = ''
@@ -181,7 +181,7 @@ def print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, l
 
     if output_format == 'JSON':
         # Dummy freq for later
-        out = {'freq': 0, 'stem': verb_lemma}
+        out = {'freq': 0, 'stem': verb_lemma, 'span': span}
         # TODO this line kills double keys!
         # Space, literal qoute (\") and at sign (@) in value is handled incorrectly in the original code
         # TODO originally stem not in JSON (JSON is generated as a separate step)
@@ -217,12 +217,14 @@ def build_index_for_sentence(sentence, logger):
 
 def process_sentence(sentence, inputlang, include_unknown_slots, output_format, logfile, logger: Logger):
     xcomp_particle = XCOMP_PARTICLE.get(inputlang)
+    span_ids = []
     for root in sentence:
         logger.debug(' '.join(root[ID:DEPS]))
 
         if root[UPOS] != ROOT_UPOS:
             continue
 
+        span_ids.append(int(root[ID]))  # Track root ID
         verb_lemma = root[LEMMA]  # We have the root (=VERB) here
 
         exts = []
@@ -243,6 +245,8 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
             if ext[HEAD] != root[ID]:
                 continue
 
+            span_ids.append(int(ext[ID]))  # Track ext ID
+
             if ext[SLOT] != NOSLOT:
                 slot = ext[SLOT]
 
@@ -260,6 +264,7 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
                             xcomp_particle is not None and
                             extofext[LEMMA] == xcomp_particle
                     )):
+                        span_ids.append(int(extofext[ID]))  # Track child ID
                         prep = extofext[LEMMA].lower()
                         # 'de': handle german contractions: am -> an
                         if inputlang == 'de' and prep in DE_CONTRACTIONS:
@@ -294,12 +299,21 @@ def process_sentence(sentence, inputlang, include_unknown_slots, output_format, 
         # Handle special 'perverb+verb' format in UD/hu -> delete the '+'
         verb_lemma = verb_lemma.replace('+', '')
 
+        span = []
+        if len(span_ids) > 0:
+            start = min(span_ids)
+            end = max(span_ids)
+
+            # TODO this makes sort impossible later
+            span = ' '.join(t[FORM].replace(' ', '_') for t in sentence[start - 1:end])  # UD IDs are 1-based
+            span_ids.clear()
+
         # TODO Find a better place for this
         # Adding subjects -- hack, because Hungarian is pro-drop
         # = if there is no subject_slot => add subject_slot:None
         if all(not e.startswith('Nom@@') for e in exts):
             exts.append('Nom@@NULL')
-        print_vcc(verb_lemma, exts, include_unknown_slots, output_format, logfile, logger)
+        print_vcc(verb_lemma, exts, span, include_unknown_slots, output_format, logfile, logger)
 
 
 def main():
